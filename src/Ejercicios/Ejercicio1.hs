@@ -1,5 +1,5 @@
 
-module Ejercicios where
+module Ejercicios.Ejercicio1 where
 
 -- Hoja 1 online
 -- a) Diseñar una función en Haskell que dados tres elementos enteros determine si están
@@ -47,8 +47,8 @@ estanOrd(x,y,z)= (x<=y)&&(y<=z)
 
 --c) Implementar en Haskell una función que reciba un número real y devuelva una tupla
 --con su parte entera y sus dos primeros decimales (como número entero).
-convierte::Float->Int
-convierte x= truncate(x)
+convierte::Float->(Int,Int)
+convierte x= (truncate(x),truncate(x*100)-100*truncate(x))
 
 
 --d) Diseñar una función que reciba una 2-tupla de números enteros y devuelva el cociente y
@@ -58,21 +58,52 @@ convierte x= truncate(x)
 --el resultado es “infinito” (n div 0) o “indeterminación” (0 div 0). Implementar tres
 --versiones distintas de la función, utilizando las tres estructuras condicionales vistas en
 --clase.
+ 
+divide::(Int,Int)->(String, Int,Int)
+divide 	(x,y)= case (x,y) of
+		(0,0) ->("indeterminacion",0,0)
+		(_,0) ->("infinito",0,0)
+		otherwise -> ("correcto",x`div`y,x`mod`y)
+
+
+
 --e) Crear una función que reciba el radio de una circunferencia y devuelva una 2-tupla con
 --la longitud de la circunferencia y con el área del círculo. Emplea una definición local con
 --la cláusula where para almacenar el valor de Pi (Nota: no se debe utilizar la función
 --predefinida pi). A continuación crear una función con el mismo cometido empleando la
 --definición local let.
+
+-- where
+circulo ::Float->(Float,Float)
+circulo x =(2*p * x,4*p*x^2)
+		where 
+			p=3.14
+
+--let
+circulo' ::Float->(Float,Float)
+circulo' x = let p=3.14 in(2*p * x,4*p*x^2)
+		
+
+
+
 --f) Se pide diseñar una función que reciba como parámetros una lista de elementos enteros
 --y un entero y añada el nuevo elemento al final de la misma.
+
+add:: [Int]->Int->[Int]
+add(x)
+
 --g) Dada una lista de elementos y una posición, implementar una función que devuelva el
 --elemento que ocupa dicha posición dentro de la lista, sin emplear el operador de
 --indirección !!. Considérese que la primera posición de la lista es la posición 0.
+
+
 --h) Escribe un programa que reciba un número entero mayor que 2 y que devuelva, en caso
 --de que exista, la suma de dos números primos cuyo resultado sea el propio número. En
 --caso de que no exista dicha pareja de números primos, puede devolver el propio
 --número con el 0.
 --sumaPrimos 12 = (1,11) sumaPrimos 17 = (17,0)
+
+
 
 --Hoja 1 presencial
 
