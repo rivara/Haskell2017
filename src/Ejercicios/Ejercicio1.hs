@@ -133,14 +133,38 @@ comprobarPrimacidad(n,i)
 --Resuelve los siguientes ejercicios en Haskell (correspondientes a los temas 2 y 3 del temario de la asignatura).
 --Ejercicios – Primera parte
 --a) Implementar una función en Haskell que dados tres números enteros determine si están ordenados de menor a mayor.
+ordenM::Int->Int->Int->Bool
+ordenM a b c  = if((c>=b) && (c>=a))then  True else False  
 
 --b) Implementar una función en Haskell que dados tres números enteros los devuelva ordenados de menor a mayor.
 
+
+ordenar2::Int->Int->Int->(Int,Int,Int)
+ordenar2 a b c  |ordenM a b c =(a,b,c)
+				|((a<=c)&&(c<=b))=(b,c,a)
+				|((c<=b)&&(a<=c))=(b,c,a)
+				|otherwise =(0,0,0)
+			
+
 --c) Implementar en Haskell una función que reciba un número real y devuelva una tupla con su parte entera y sus dos primeros decimales (como número entero).
 
+convierte2::Float->(Int,Int)
+convierte2 x= (truncate(x),truncate(x*100)-100*truncate(x))
 --d) Crear una función que reciba el radio de una circunferencia y devuelva una 2-tupla con la longitud de la circunferencia y con el área del círculo. Emplea una definición local con la cláusula where para almacenar el valor de Pi (Nota: no se debe utilizar la función predefinida pi). A continuación crear una función con el mismo cometido empleando la definición local let.
+circulo2 ::Float->(Float,Float)
+circulo2 x =(2*p * x,4*p*x^2)
+		where 
+			p=3.14
 
---e) Implementar la función predefinida de listas concat, que se llamará concatenar, utilizando la definición de listas por comprensión (no se puede utilizar recursividad).
+--let
+circulo2' ::Float->(Float,Float)
+circulo2' x = let p=3.14 in(2*p * x,4*p*x^2)
+		
+--e) Implementar la función predefinida de listas concat, que se llamará concatenar, 
+-- utilizando la definición de listas por comprensión (no se puede utilizar recursividad).
+concatenar::[[a]]->[a]
+concatenar bss = [b|bs<-bss, b<-bs  ]
+
 
 --f) Implementar una función que dado un número entero devuelva en una lista todos los factores de dicho número. Se debe utilizar la definición de listas por comprensión.
 --En matemáticas, los factores de un número son los números enteros que pueden multiplicarse juntos para igualar ese número. O también se puede decir que los factores de un número son números enteros por el que un número es divisible.
