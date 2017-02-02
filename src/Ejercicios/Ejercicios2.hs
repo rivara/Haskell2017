@@ -6,12 +6,18 @@ module Ejercicios.Ejercicios2 where
 --[5,9,-9,85,15]
 --Se piden diferentes versiones de la misma función:
 --- Con definición de listas por comprensión
-
+cribar::[Int]->Int->[Int]
+cribar xs y= [x|x<-xs , x`rem`y /=0] 
 
 --- Con recursividad no final
-
+cribar'::[Int]->Int->[Int]
+cribar'  [] _ = []
+cribar' (x:xs)  y=  if ( x`rem`y /=0) then x:cribar' xs y else cribar' xs y
 
 --- Con recursividad final o de cola
+
+
+
 
 
 --b) Dada la siguiente definición de función
