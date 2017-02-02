@@ -1,5 +1,7 @@
 
 module Ejercicios.Ejercicio1 where
+
+import Data.Char
 --Reload 
 -- Hoja 1 online
 -- a) Diseñar una función en Haskell que dados tres elementos enteros determine si están
@@ -22,14 +24,8 @@ ordena1 (a,b,c) =  if (a>=b)&&(a>=c)&&(b>=c) then (a,b,c) else
 				if (c>=a)&&(c>=b)&&(a>=b) then (c,a,b) else
 				 (c,b,a) 
 				
-			  
-				
--- case
+			  				
 
-				
-				
-				
-				
 
 -- Ejercicio (b)
 -- Ordena tres elementos
@@ -163,34 +159,80 @@ circulo2' x = let p=3.14 in(2*p * x,4*p*x^2)
 --e) Implementar la función predefinida de listas concat, que se llamará concatenar, 
 -- utilizando la definición de listas por comprensión (no se puede utilizar recursividad).
 concatenar::[[a]]->[a]
-concatenar bss = [b|bs<-bss, b<-bs  ]
+concatenar bss = [b|bs<-bss, b<-bs]
 
 
---f) Implementar una función que dado un número entero devuelva en una lista todos los factores de dicho número. Se debe utilizar la definición de listas por comprensión.
---En matemáticas, los factores de un número son los números enteros que pueden multiplicarse juntos para igualar ese número. O también se puede decir que los factores de un número son números enteros por el que un número es divisible.
+--f) Implementar una función que dado un número entero devuelva en una lista 
+-- todos los factores de dicho número. Se debe utilizar la definición de listas por comprensión.
+--En matemáticas, los factores de un número son los números enteros que pueden multiplicarse juntos para igualar ese número. 
+--O también se puede decir que los factores de un número son números enteros por el que un número es divisible.
 
---g) Implementar una función que diga si un número es primo. Para ello se debe utilizar la función que calcula el número de factores de un número (ejercicio f).
+divisibles::Int->[Int]
+divisibles y=[x | x <- [1..y], y`mod`x ==0]
+
+--g) Implementar una función que diga si un número es primo. Para ello se debe utilizar la función que calcula el número de factores
+--  de un número (ejercicio f).
 --Nota: Si para resolver el ejercicio se deben comparar dos listas, se puede hacer con el operador de igualdad de listas (==). Por ejemplo:
 -- > [1,2,3] == [1,2,3]
 --True
 -- > [1,2,3] == [1,2]
 --False
 
---h) Implementar una función que diga cuántos caracteres en mayúscula están contenidos en una frase dada. Se deberá utilizar la definición de listas por comprensión.
---Ejercicios – Segunda parte
+primos::Int->Bool
+primos x = [1,x] == divisibles x 
 
---i) Implementar una función que dada una tupla de tres elementos, donde cada uno de ellos es a su vez una tupla de dos elementos de tipo String e Int respectivamente, retorne el primer elemento de cada tupla interna. Se deberá utilizar ajuste de patrones.
+--h) Implementar una función que diga cuántos caracteres en mayúscula están contenidos en una frase dada. 
+-- Se deberá utilizar la definición de listas por comprensión.
 
---j) Implementar una función que devuelve True si la suma de los cuatro primeros elementos de una lista de números enteros es un valor menor a 10 y devolverá False en caso contrario. Se deberá utilizar ajuste de patrones.
+cuentaM::String->Int
+cuentaM xs = length [x |x <- xs , isUpper x]
+ 
 
---k) Implementar una función que dado un carácter, que representa un punto cardinal, devuelva su descripción. Por ejemplo, dado ‘N’ devuelva “Norte”.
+--i) Implementar una función que dada una tupla de tres elementos, donde cada uno de ellos es a su vez una tupla de dos
+-- elementos de tipo String e Int respectivamente, retorne el primer elemento de cada tupla interna.
+--  Se deberá utilizar ajuste de patrones.
 
---l) Implementar una función que dada una frase retorne un mensaje donde se indique cuál es la primera y última letra de la frase original. Un ejemplo de aplicación de la función podría ser:
+primeraParte::((String,Int),(String,Int),(String,Int))->(String,String,String)
+primeraParte((s1,r1),(s2,r2),(s3,r3))=(s1,s2,s3)
+
+
+--j) Implementar una función que devuelve True si la suma de los cuatro primeros elementos de una lista de números enteros
+--  es un valor menor a 10 y devolverá False en caso contrario. Se deberá utilizar ajuste de patrones.
+sumaMen::[Int]->Bool
+sumaMen [] = True
+sumaMen [x1] = x1 < 10
+sumaMen [x1,x2] = x1 < 10
+sumaMen [x1,x2,x3] = x1 < 10
+sumaMen (x1:x2:x3:x4:xs) =sum [x1,x2,x3,x4]<10 
+
+
+
+--k) Implementar una función que dado un carácter, que representa un punto cardinal, devuelva su descripción.
+--  Por ejemplo, dado ‘N’ devuelva “Norte”.
+
+cardinales::Char->String
+cardinales 'N'="Norte"
+cardinales 'S'="Sur"
+cardinales 'E'="Este"
+cardinales 'O'="Oeste"
+cardinales _ = "No existe"
+
+--l) Implementar una función que dada una frase retorne un mensaje donde se indique cuál es la primera y última letra de la 
+--frase original. Un ejemplo de aplicación de la función podría ser:
 -- > procesarFrase "El perro de San Roque"
 --"La primera letra de la frase ''El perro de San Roque'' es 'E' y la ultima letra es 'e'"
---Nota: No se permite el uso de recursividad. Se debe usar ajuste de patrones y se puede utilizar también patrones nombrados (para referirse a la cadena de entrada).
+--Nota: No se permite el uso de recursividad. Se debe usar ajuste de patrones y se puede utilizar también 
+--patrones nombrados (para referirse a la cadena de entrada).
 
---m) Implementar una función que dado un número entero devuelva mensajes indicando en qué rango de valores se encuentra dicho número (menor de 10, entre 10 y 20 o mayor de 20). Se debe utilizar definiciones locales.
+primeraUltima::String->String
+primeraUltima []= ""
+primeraUltima [c]= "solo un elemento"
+primeraUltima (x:xs)= [x]++ drop ((length xs)-1) xs 
+
+
+
+--m) Implementar una función que dado un número entero devuelva mensajes indicando en qué rango de valores
+-- se encuentra dicho número (menor de 10, entre 10 y 20 o mayor de 20). Se debe utilizar definiciones locales.
 --Ejemplos de aplicación de la función son:
 -- > clasificarValorEntrada 20
 --"El valor de entrada es mayor o igual a 10 y menor o igual a 20"
@@ -199,8 +241,26 @@ concatenar bss = [b|bs<-bss, b<-bs  ]
 -- > clasificarValorEntrada 35
 --"El valor de entrada es mayor que 20"
 
---Pista: La cadena “El valor de entrada” se repite constantemente, por ello una definición local tiene sentido para que sólo se defina una vez.
---n) Implementar una función que dada una cadena de caracteres y un carácter, indique el número de apariciones del carácter en la cadena. No se debe utilizar recursividad, sí ajuste de patrones. Pista: utilizar la definición de listas por comprensión.
+--Pista: La cadena “El valor de entrada” se repite constantemente, por ello una definición local tiene sentido para 
+-- que sólo se defina una vez.
+
+
+clasificarValorEntrada::Int->String
+clasificarValorEntrada x  	
+						| x<10 = headMessage ++"menor que"++show ten
+						| x>=10 && x<=20 = headMessage++"entre"++ show ten ++"y"++ show tweenty
+						| otherwise = headMessage++show ten ++"y"++show tweenty							
+						where 
+						headMessage = "valor mayor"
+						ten = 10
+						tweenty = 20
+
+
+
+
+-- *9****************************************
+--n) Implementar una función que dada una cadena de caracteres y un carácter, indique el número de apariciones del carácter en la cadena.
+--  No se debe utilizar recursividad, sí ajuste de patrones. Pista: utilizar la definición de listas por comprensión.
 --Ejemplos de aplicación de la función:
 -- > contarApariciones "casa" 'c'
 --1
@@ -208,3 +268,9 @@ concatenar bss = [b|bs<-bss, b<-bs  ]
 --2
 -- > contarApariciones "" 'c'
 -- 0
+
+contarApariciones::String->Char->Int
+contarApariciones [] _= 0
+contarApariciones xs y=length[x|x<-xs,x == y]
+
+
