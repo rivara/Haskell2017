@@ -1,6 +1,5 @@
 
-module Ejercicios.Ejercicios2 where
---Hoja de Ejercicios 2 online
+module Ejercicios.Ejercicio2 where
 --a)Implementa una función en Haskell que elimine de una lista de enteros aquellos números múltiplo de x. > 
 --  cribar [0,5,8,9,-9,6,0,85,-12,15] 2
 --[5,9,-9,85,15]
@@ -68,15 +67,27 @@ sumaDobles'' xs =sum(map(\x->x+x) xs)
 --d) Implementa una función que sume los cuadrados de los números pares contenidos en una lista de números enteros. Se piden dos versiones:
 
 --a. Una versión que haga uso de las funciones de orden superior de listas map y filter para definir la nueva función.
---cuadrados::[Int]->[Int]
---cuadrados xs= map (2^) (filter odd xs)
+cuadrados::[Int]->[Int]
+cuadrados xs= map (2^) (filter odd xs)
 
 --b. Una versión que utilice la definición de listas por comprensión.
---cuadrados'::[Int]->[Int]
---cuadrados' xs= [x^2|x<-xs, odd x]
+cuadrados'::[Int]->[Int]
+cuadrados' xs= [x^2|x<-xs, odd x]
 
---e) Dada una lista de enteros, implementar una función para devolver tuplas formadas por los elementos (sin repetir) de la lista, junto con la primera posición en la que aparecen. > primeraAparicion [1,5,6,0,2,6,4,78,9,41,-9,8,-9,12,45,0] [(1,1),(5,2),(6,3),(0,4),(2,5),(4,7),(78,8),(9,9),(41,10),
---(-9,11),(8,12),(12,14),(45,15)]
+--e)Dada una lista de enteros, implementar una función para devolver tuplas formadas por los elementos 
+--  (sin repetir) de la lista, junto con la primera posición en la que aparecen. >
+--  primeraAparicion [1,5,6,0,2,6,4,78,9,41,-9,8,-9,12,45,0] [(1,1),(5,2),(6,3),(0,4),(2,5),(4,7),(78,8),(9,9),(41,10),
+--  (-9,11),(8,12),(12,14),(45,15)]
+
+primeraAparicion::[Int]->[(Int,Int)]
+primeraAparicion = primeraAparicionAux 1 [] [] -- Índice Lista_Aparecidos Lista_Tuplas_Resultado Lista_Original (Currificación)
+
+
+primeraAparicionAux :: Int->[Int]->[(Int,Int)]->[Int]->[(Int,Int)]
+primeraAparicionAux _ _ r [] = r
+primeraAparicionAux i as ts (x:xs)= if x `elem` as then primeraAparicionAux (i+1) as ts xs else 
+													 primeraAparicionAux (i+1)(as ++ [x])(ts ++[(x,i)]) xs
+
 
 --f) Implementar en Haskell una función que calcule el número de secuencias de ceros que hay en una lista de números. > ceros [0] > ceros[0,0]
 --1 1 > ceros [0,1,0] > ceros [0,0,1,5,0,4,0,0,0,5]
@@ -85,6 +96,9 @@ sumaDobles'' xs =sum(map(\x->x+x) xs)
 
 --g) Implementar una función en Haskell que reciba una lista de números enteros y devuelva dos listas: una con los elementos sin repetir y otra con los elementos que están repetidos. > repeticiones [0,6,0,8,-2,-5,4,-2,6,98,71,2,0,5]
 --([8,-5,4,98,71,2,5],[0,6,-2])
+
+
+
 --h) Dada una lista de números enteros implementar una función que devuelva una lista con los n elementos mayores de la lista original.
 -- > nmayores [8,4,-5,6,-1,0,2,6,-10,7] 4
 --[8,7,6,6]
@@ -92,9 +106,8 @@ sumaDobles'' xs =sum(map(\x->x+x) xs)
 --[8,4,6,6,7,0,2]
 -- > nmayores [8,4,-5,6,-1,0,2,6,-10,7] 11
 --[8,4,-5,6,-1,0,2,6,-10,7]
---Hoja de Ejercicios 2
---Programación Declarativa
---3
+
+
 --i) Implementa una función incluye en Haskell que reciba dos listas de números enteros y nos diga si la primera de las listas está contenida en la segunda. Se dice que una lista está contenida en otra si los elementos de la primera aparecen dentro de la segunda, en el mismo orden y de forma consecutiva.
 -- > incluye [] [4,5] > incluye [4,4,2] [5,4,4,5,4,4,2,9]
 --True True
