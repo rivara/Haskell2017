@@ -16,6 +16,13 @@ cribar' (x:xs)  y=  if ( x`rem`y /=0) then x:cribar' xs y else cribar' xs y
 
 --- Con recursividad final o de cola
 
+cribar'' :: [Int] -> Int -> [Int]
+cribar''  = cribarAux []
+
+cribarAux::[Int] -> [Int] -> Int -> [Int]
+cribarAux r [] _ =r
+cribarAux r (x:xs) n=  cribarAux xs (if x `rem` n /= 0 then r ++ [x] else r) n
+
 
 
 
@@ -24,25 +31,49 @@ cribar' (x:xs)  y=  if ( x`rem`y /=0) then x:cribar' xs y else cribar' xs y
 --doble :: Int -> Int
 --doble x = x + x
 --¿Cómo cambiaría la definición utilizando expresiones lambda?
+-- B
+{-
+(\x -> x + x)
+-}
 
+--c) Se pide una función en Haskell que dada una lista de números enteros obtenga un número 
+-- entero con el resultado de calcular el doble de cada uno de los elementos de la lista original y sumarlos todos. 
+-- Se piden diferentes versiones de la misma función:
 
---c) Se pide una función en Haskell que dada una lista de números enteros obtenga un número entero con el resultado de calcular el doble de cada uno de los elementos de la lista original y sumarlos todos. Se piden diferentes versiones de la misma función:
 --- Con recursividad no final
+sumaDobles::[Int]->Int
+sumaDobles [] = 0
+sumaDobles (x:xs) =x*2 + sumaDobles xs   
+
+
 --- Con recursividad final o de cola
+
+sumaDobles'::[Int]->Int
+sumaDobles'= sumaDoblesAux 0
+
+sumaDoblesAux::Int->[Int]->Int
+sumaDoblesAux r[]= r
+sumaDoblesAux r(x:xs) = sumaDoblesAux (r + x * 2)  xs			
+
+
 --- Utilizando expresiones lambda u orden superior (se puede hacer uso de la función predefinida de Haskell map).
 -- > sumaDobles [2,3,4]
 --18
 -- > sumaDobles [1,2,3]
 --12
 
-
+sumaDobles''::[Int]->Int
+sumaDobles'' xs =sum(map(\x->x+x) xs)
 
 --d) Implementa una función que sume los cuadrados de los números pares contenidos en una lista de números enteros. Se piden dos versiones:
 
-
 --a. Una versión que haga uso de las funciones de orden superior de listas map y filter para definir la nueva función.
+--cuadrados::[Int]->[Int]
+--cuadrados xs= map (2^) (filter odd xs)
 
 --b. Una versión que utilice la definición de listas por comprensión.
+--cuadrados'::[Int]->[Int]
+--cuadrados' xs= [x^2|x<-xs, odd x]
 
 --e) Dada una lista de enteros, implementar una función para devolver tuplas formadas por los elementos (sin repetir) de la lista, junto con la primera posición en la que aparecen. > primeraAparicion [1,5,6,0,2,6,4,78,9,41,-9,8,-9,12,45,0] [(1,1),(5,2),(6,3),(0,4),(2,5),(4,7),(78,8),(9,9),(41,10),
 --(-9,11),(8,12),(12,14),(45,15)]
