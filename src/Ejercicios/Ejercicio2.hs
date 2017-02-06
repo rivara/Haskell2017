@@ -166,9 +166,12 @@ ordenar = ordenarAux[]
 
 ordenarAux ::[Int]->[Int]->[Int]
 ordenarAux r []= r 
-ordenarAux ys (x:xs) = ordenarAux (ys++[minimum xs])xs
+ordenarAux ys (x:xs) = ordenarAux (insertarOrdenado x ys) xs
 
--- Version Javier
+insertarOrdenado::Int->[Int]->[Int]
+insertarOrdenado n []=[n]
+insertarOrdenado n(x:xs)= if n>x then x:insertarOrdenado n xs else n:x:xs	
+
 
 
 --k) Implementa una función polimórfica en Haskell que reciba 2 listas y vaya cogiendo un elemento de la primera y dos de la segunda, 
@@ -183,19 +186,32 @@ ordenarAux ys (x:xs) = ordenarAux (ys++[minimum xs])xs
 --[(True,2.3,5.9)]
 
 
+mezclarEnTernas::[a]->[b]->[(a,b,b)]
+mezclarEnTernas =mezclarEnTernasAux[]
+
+mezclarEnTernasAux::[(a,b,b)]->[a]->[b]->[(a,b,b)]
+mezclarEnTernasAux r [] _= r
+mezclarEnTernasAux r _ []= r
+mezclarEnTernasAux r (x:xs)[y]= r
+mezclarEnTernasAux r (x:xs)(y1:y2:ys)= mezclarEnTernasAux (r ++ [(x,y1,y2)]) xs ys 
+
 --l) Se pide una función polimórfica en Haskell que dado un elemento y una lista añada dicho elemento al final de la lista.
 -- > alFinal 3 [1,2,6,7]
 --[1,2,6,7,3]
---Hoja de Ejercicios 2
---Programación Declarativa
---4
 -- > alFinal True [False,False]
 --[False,False,True]
 -- > alFinal 'k' "casita"
 --"casitak"
 
+alFinal:: a->[a]->[a]
+alFinal n []=[n] 
+alFinal x ys= ys++[x] 
 
---m) Mediante la programación de orden superior se pide implementar una de las funciones predefinidas en la librería estándar de Haskell: la función zipWith. Esta función recibe como parámetros una función y dos listas y une ambas listas aplicado la función entre los correspondientes parámetros.
+
+
+--m) Mediante la programación de orden superior se pide implementar una de las funciones predefinidas en la librería estándar de Haskell: 
+-- la función zipWith. Esta función recibe como parámetros una función y dos listas y une ambas listas aplicado la función entre
+--  los correspondientes parámetros.
 -- > zipWith' max [6,3,2,1] [7,3,1,5]
 --[7,3,2,5]
 -- > zipWith' (++) ["hola ", "ciao ", "hi "] ["pepe", "ciao", "peter"]
@@ -211,29 +227,58 @@ ordenarAux ys (x:xs) = ordenarAux (ys++[minimum xs])xs
 --crearTupla x y = (x,y)
 --)
 
+crearTupla :: a-> b-> (a,b)
+crearTupla x y = (x,y)
+
+zipWith':: (a->b->c)->[a]->[b]->[c]
+zipWith' f [] []=[]
+zipWith' f [] _	=[]
+zipWith' f _ [] =[]
+zipWith' f (n1:ns1)(n2:ns2)=[f n1 n2] ++ zipWith' f ns1 ns2
+
+
 
 
 --n) Define una función polimórfica que sea capaz de invertir los elementos de una lista. Se piden diferentes versiones:
---- Con recursividad no final
---- Con recursividad de cola o final
---- Utilizando la función de orden superior foldr
 -- > reverse' [1,2,3]
 --[3,2,1]
 -- > reverse' "casa"
 --"asac"
 
 
+--- Con recursividad no final
+reverse'::[a]->[a]
+reverse' [] = []
+reverse'(x:xs)=  reverse' xs ++[x]
+
+
+--- Con recursividad de cola o final
+
+reverse''::[a]->[a]
+reverse'' = reverseAux[]
+
+reverseAux::[a]->[a]->[a]
+reverseAux r []= r
+reverseAux r (x:xs)=  reverseAux ([x]++r) xs  --(x:r)
+
+--- Utilizando la función de orden superior foldr
+reverse'''::[a]->[a]
+reverse''' = foldr (\n ns->ns ++ [n]) []
+
+
 --o) Define una función polimórfica que sea capaz de invertir los elementos de una lista de listas.
 -- > reverse'' [[1,2,3],[3,4,5]]
 --[[5,4,3],[3,2,1]]
---Hoja de Ejercicios 2
---Programación Declarativa
---5
 -- > reverse'' ["pepe", "casa", "patio"]
 --["oitap","asac","epep"]
 
+reve::[[a]]->[[a]]
+reve = foldr(\n ns->ns ++[reverse''' n])[]
 
---p) Implementar la función predefinida de la librería estándar flip. Esta función lo que hace es recibir una función y devolver otra función que es idéntica a la función original, salvo que intercambia los dos primeros parámetros.
+
+
+--p) Implementar la función predefinida de la librería estándar flip. Esta función lo que hace es recibir una función y
+-- devolver otra función que es idéntica a la función original, salvo que intercambia los dos primeros parámetros.
 -- > flip' zip [1,2,3] "casa"
 --[('c',1),('a',2),('s',3)]
 -- > flip' (+) 3 4
@@ -242,10 +287,21 @@ ordenarAux ys (x:xs) = ordenarAux (ys++[minimum xs])xs
 --"pollocasa"
 
 
---q) Implementar la función polimórfica predefinida de la librería estándar map. Esta función lo que hace es recibir una función y una lista y devuelve la lista resultante de aplicar la función a cada elemento de la lista original.
+flip':: (a->b->c)->(b->a->c)
+flip' f x y=f y x
+
+
+
+--q) Implementar la función polimórfica predefinida de la librería estándar map. Esta función lo que hace es recibir una función 
+-- y una lista y devuelve la lista resultante de aplicar la función a cada elemento de la lista original.
 -- > map (3*) [1,2,3]
 --[3,6,9]
 -- > map doble [1,2,3]
 --[2,4,6]
 -- > map not [True,False]
 --[False,True]
+
+--map'
+
+
+
