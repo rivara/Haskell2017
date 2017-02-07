@@ -301,7 +301,12 @@ flip' f x y=f y x
 -- > map not [True,False]
 --[False,True]
 
---map'
+mapt:: (a->a)->[a]->[a]
+mapt = mapAux []
+
+mapAux::[a]->(a->a)->[a]->[a]
+mapAux r _ 	[]=r 
+mapAux r f (x:xs)= mapAux (r++[f x]) f xs
 
 
 

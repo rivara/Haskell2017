@@ -1,2 +1,54 @@
 
 module Ejercicios.Ejercicios3 where
+
+--Listado de ejercicios para poner en práctica los conocimientos adquiridos sobre definición de tipos sinónimos y nuevos tipos, tipos recursivos y tipos recursivos polimórficos.
+--Ejercicios:
+--a) Se pide una función que dada una lista de racionales, donde cada racional se define como dos números enteros (numerador y denominador), y un número racional, devuelva otra lista con todos los racionales equivalentes al dado. Realiza dos versiones del ejercicio:
+--1. Empleando type.
+--2. Empleando data.
+--Ejemplos de aplicación (si se utiliza type) serían:
+-- > equivalentes [(2,4),(3,5),(4,8)] (1,2)
+--[(2.0,4.0),(4.0,8.0)]
+-- > equivalents [(3,5)] (1,2)
+--[]
+--Ejemplos de aplicación (si se utiliza data) serían:
+-- > equivalentes[R(2,4),R(3,5),R(4,8)] (R(1,2))
+--[R (2.0,4.0),R (4.0,8.0)]
+-- > equivalentes [R(3,5)] (R(1,2))
+--[]
+--b) Se pide varias funciones para hacer lo siguiente:
+--1. Función que dado un punto de coordenadas y una dirección (Norte, Sur, Este u Oeste) mueva el punto hacia la dirección indicada. Un ejemplo de aplicación de la función sería:
+-- > mover Este (3,4) > mover Norte (3.5,9.2)
+--(4,4) (3.5,10.2)
+--2. Función que dados dos puntos de coordenadas indique cuál está más al sur. Ejemplos de aplicación de la función son:
+-- > masAlSur (3,5) (4,6) > masAlSur (4.5,-6.2) (4.5,-7)
+--(3.0,5.0) (4.5,-7.0)
+--3. Función que calcule la distancia entre dos puntos:
+-- > distancia (3,5) (6,7)
+--3.6055512
+--4. Función que dado un punto y una lista de direcciones, retorne el camino que forman todos los puntos después de cada movimiento sucesivo desde el punto original:
+-- >camino (3.2,5.5) [Sur,Este,Este,Norte,Oeste]
+--[(3.2,4.5),(4.2,4.5),(5.2,4.5),(5.2,5.5),(4.2,5.5)]
+--c) La empresa RealTimeSolutions, Inc. está trabajando en un controlador para una central domótica. El controlador recibe información de termostatos situados en diferentes habitaciones de la vivienda y basándose en esta información, activa o desactiva el aire acondicionado en cada una de las habitaciones. Los termostatos pueden enviar la información sobre la temperatura en grados Celsius o Fahrenheit. A su vez, los aparatos de aire acondicionado reciben dos tipos de órdenes: apagar y encender (on y off). Se pide:
+--1. Definir un tipo de datos para representar las temperaturas en ambos tipos de unidades.
+--2. Definir una función convert que dada una temperatura en grados Celsius la convierta a grados Fahrenheit y viceversa. (Conversión de C a F: f = c * 9/5 + 32; conversión de F a C: c = (f – 32) * 5/9.)
+--3. Definir un tipo de datos para representar las órdenes a los aparatos de a/a.
+--4. Definir una función action que dada una temperatura en cierta habitación determine la acción a realizar sobre el aparato de a/a de dicha habitación. El controlador debe encender el aparato si la temperatura excede de 28ºC. Ejemplos de aplicación:
+-- > action(Celsius(25)) > action(Fahrenheit(83.5))
+--On Off
+--d) Definir un tipo moneda para representar euros y dólares USA. Definir una función que convierta entre ambas monedas sabiendo que el factor de conversión de euros a dólares es 1.14.
+--e) Dada el siguiente tipo de datos recursivo que representa expresiones aritméticas:
+--data Expr = Valor Integer
+-- |Expr :+: Expr
+-- |Expr :-: Expr
+-- |Expr :*: Expr deriving Show
+--e.1) Se pide una función para calcular el valor de una expresión.
+--e.2) Se pide una función para calcular el número de constantes de una expresión.
+--f) Dado el siguiente tipo de datos que representa un árbol binario:
+--data Arbol a = AV | Rama (Arbol a) a (Arbol a) deriving Show
+--Se pide definir una función que calcule el espejo de un árbol.
+--Ejemplos de aplicación de la función serían:
+-- > espejo (Rama (Rama (Rama AV 60 AV) 8 AV) 5 (Rama AV 4 AV))
+--Rama (Rama AV 4 AV) 5 (Rama AV 8 (Rama AV 60 AV))
+-- > espejo (Rama AV 5 (Rama AV4 AV))
+--Rama (Rama AV 4 AV) 5 AV
