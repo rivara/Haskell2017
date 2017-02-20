@@ -7,12 +7,25 @@ module Ejercicios.Ejercicios4 where
 --a) Definir una función que dado un día de la semana, indique si éste es o no laborable. Para representar 
 --   el día de la semana se deberá crear un nuevo tipo enumerado.
 
-data Dia=Lunes|Martes|Miercoles|Jueves|Viernes 
+data Dia=Lunes|Martes|Miercoles|Jueves|Viernes deriving (Show,Eq)
 
-laborable::dia->bool
-laborable d = if (d=="Lunes") True else False 
+laborable::[Dia]
+laborable = [Lunes,Martes,Miercoles,Jueves,Viernes]
+
+pertenece:: (Eq a)=>[a]->a->Bool
+pertenece [] _= False
+pertenece (x:xs) e= x==e || Pertenece xs e
+
+esLaborable ::DiaSemana->Bool
+esLaborable dia= dia`elem`laborables		
 
 --b) Se quiere ordenar los elementos de una lista (cuyos elementos son comparables) mediante el algoritmo del quicksort.
+quicksort::(Ord a)=>a
+quicksort[]=[]
+quicksort (e:es) = quicksort ordenI ++[e]++ quicksort ordenD 
+ where 
+	ordenI=[n|n<-es,n<e]
+	ordenD=[n|n<-es,n>=e]
 
 --c) Se pide implementar una función que dada un número (de cualquier tipo que soporte la operación de división) 
 --   y una lista de números del mismo tipo, divida a ese número por cada uno de los elementos contenidos 
