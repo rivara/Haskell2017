@@ -164,25 +164,48 @@ data Moneda= Euros' Float| Dollar' Float deriving Show
 conver::Moneda->Moneda
 conver (Euros' e) = (Dollar' (e * 1.14))
 conver (Dollar' d) = (Euros' (d / 1.14))
-
+-- conver (Dollar' 3.3)
 
 
 --e) Dada el siguiente tipo de datos recursivo que representa expresiones aritméticas:
---data Expr = Valor Integer
--- |Expr :+: Expr
--- |Expr :-: Expr
--- |Expr :*: Expr deriving Show
+data Expr = Valor Integer
+ |Expr :+: Expr
+ |Expr :-: Expr
+ |Expr :*: Expr deriving Show
 
 
 
 --e.1) Se pide una función para calcular el valor de una expresión.
+calcularExp::Expr->Integer
+calcularExp(Valor v)=v
+calcularExp(expr1:+:expr2)=(calcularExp expr1) + (calcularExp expr2)
+calcularExp(expr1:-:expr2)=(calcularExp expr1) - (calcularExp expr2)
+calcularExp(expr1:*:expr2)=(calcularExp expr1) * (calcularExp expr2)
+-- calcularExp((Valor 3:+: Valor 4):-:Valor 1)
+
+
 --e.2) Se pide una función para calcular el número de constantes de una expresión.
 
+calcularConstante::Expr->Integer
+calcularConstante(Valor v)=0
+calcularConstante(expr1:+:expr2)=1+(calcularConstante expr1)+(calcularConstante expr2)
+calcularConstantes(expr1:-:expr2)=1+(calcularConstante expr1)-(calcularConstante expr2)
+calcularConstantes(expr1:*:expr2)=1+(calcularConstante expr1)*(calcularConstante expr2)
+--calcularConstantes((Valor 3:+: Valor 4):-:Valor 1)
+
 --f) Dado el siguiente tipo de datos que representa un árbol binario:
---data Arbol a = AV | Rama (Arbol a) a (Arbol a) deriving Show
+data Arbol a = AV | Rama (Arbol a) a (Arbol a) deriving Show
 --Se pide definir una función que calcule el espejo de un árbol.
 --Ejemplos de aplicación de la función serían:
 -- > espejo (Rama (Rama (Rama AV 60 AV) 8 AV) 5 (Rama AV 4 AV))
 --Rama (Rama AV 4 AV) 5 (Rama AV 8 (Rama AV 60 AV))
 -- > espejo (Rama AV 5 (Rama AV4 AV))
 --Rama (Rama AV 4 AV) 5 AV
+
+espejo:: Arbol a->Arbol a
+espejo AV=AV
+espejo (Rama AV r AV)= Rama AV r AV
+espejo (Rama i r d)= (Rama ed r ei)
+					where ei= espejo i;ed= espejo d
+
+

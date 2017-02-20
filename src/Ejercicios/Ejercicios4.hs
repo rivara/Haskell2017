@@ -1,16 +1,30 @@
 
 module Ejercicios.Ejercicios4 where
 
---Listado de ejercicios para poner en práctica los conocimientos adquiridos sobre definición de tipos sinónimos y nuevos tipos, tipos recursivos y tipos recursivos polimórficos. Y también sobre el manejo de clases de tipos en Haskell.
+--Listado de ejercicios para poner en práctica los conocimientos adquiridos sobre definición de tipos sinónimos y nuevos tipos,
+-- tipos recursivos y tipos recursivos polimórficos. Y también sobre el manejo de clases de tipos en Haskell.
 --Ejercicios:
---a) Definir una función que dado un día de la semana, indique si éste es o no laborable. Para representar el día de la semana se deberá crear un nuevo tipo enumerado.
+--a) Definir una función que dado un día de la semana, indique si éste es o no laborable. Para representar 
+--   el día de la semana se deberá crear un nuevo tipo enumerado.
+
+data Dia=Lunes|Martes|Miercoles|Jueves|Viernes 
+
+laborable::dia->bool
+laborable d = if (d=="Lunes") True else False 
+
 --b) Se quiere ordenar los elementos de una lista (cuyos elementos son comparables) mediante el algoritmo del quicksort.
---c) Se pide implementar una función que dada un número (de cualquier tipo que soporte la operación de división) y una lista de números del mismo tipo, divida a ese número por cada uno de los elementos contenidos en la lista y devuelva una lista con el resultado.
+
+--c) Se pide implementar una función que dada un número (de cualquier tipo que soporte la operación de división) 
+--   y una lista de números del mismo tipo, divida a ese número por cada uno de los elementos contenidos 
+--   en la lista y devuelva una lista con el resultado.
+
+
 --Ejemplos de aplicación de la función son:
 -- > divisiones 5 [1,2,3]
 --[Just 5,Just 2,Just 1]
---> divisiones 5 [1,2,3,0,9,10]
+-- > divisiones 5 [1,2,3,0,9,10]
 --[Just 5,Just 2,Just 1,Nothing,Just 0,Just 0]
+
 --d) Dado un nuevo tipo de datos para representar un árbol binario de cualquier tipo, definido como sigue:
 --data Arbol a = AV | Rama (Arbol a) a (Arbol a)
 --Se pide definir una función que visualice el árbol por pantalla de una determinada forma: separando cada hijo izquierdo y derecho por “|”, la raíz entre guiones y cada nivel diferente del árbol por “( )”. Ejemplos de aplicación de la función sería los siguientes:
@@ -34,7 +48,7 @@ module Ejercicios.Ejercicios4 where
 -- > Fecha 10 10 2013 > Fecha 24 12 2012
 --10/10/2013 24/12/2012
 --g) Teniendo en cuenta el nuevo tipo de datos Fecha definido anteriormente, se pide una función que sea capaz de comparar dos fechas. Ejemplos de aplicación de la función serían:
---> mismaFecha (Fecha 10 10 2013) (Fecha 10 10 2013)
+-- > mismaFecha (Fecha 10 10 2013) (Fecha 10 10 2013)
 --True
 -- > mismaFecha (Fecha 10 11 2013) (Fecha 10 10 2013)
 --False
@@ -53,15 +67,15 @@ module Ejercicios.Ejercicios4 where
 --data Cola a = Col [a] deriving Show
 --El primero de ellos representa una estructura de datos LIFO con elementos de tipo a. El segundo representa una estructura de datos FIFO de elementos de tipo a.
 --Ejemplos de aplicación de las funciones para ambos tipos de datos serían:
---> insertar 10 (Col [1,2,3,4])
+-- > insertar 10 (Col [1,2,3,4])
 --Col [1,2,3,4,10]
---> insertar 10 (Pil [1,2,3,4])
+-- > insertar 10 (Pil [1,2,3,4])
 --Pil [1,2,3,4,10]
---> primero (Col [1,2,3,4,10])
+-- > primero (Col [1,2,3,4,10])
 --1
 -- > primero (Pil [1,2,3,4,10])
 --10
---> eliminar (Col [1,2,3,4,10])
+-- > eliminar (Col [1,2,3,4,10])
 --Col [2,3,4,10]
 -- > eliminar (Pil [1,2,3,4,10])
 --Pil [1,2,3,4]
