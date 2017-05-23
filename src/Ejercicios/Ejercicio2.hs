@@ -145,9 +145,9 @@ incluye xs1 (x2:xs2)
 
 incluyeAux::[Int]->[Int]->Bool
 incluyeAux[] _=True
-incluyeAux _[]= False
+incluyeAux _ []= False
 incluyeAux(x1:xs1)(x2:xs2)
-	|x1==x2 = incluyeAux xs1 xs2
+	|x1==x2 = True
 	|otherwise =False
  
 
