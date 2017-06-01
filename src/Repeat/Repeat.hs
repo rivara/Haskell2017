@@ -345,12 +345,321 @@ mapAux ys f (x:xs)= mapAux (ys ++[f x]) f xs
 
 --d. foldl (\ a b-> a:b)[]
 
---2. Desarrolla la ejecución de la función incognita para ver qué haría sobre la lista de números enteros incluida en su invocación
---incognita l = foldl (\ (y:z:xs) x -> if odd x then [y++[x],z] else [y,z++[x]])[[],[]] [14,5,8,7,9,16]
+--2. Desarrolla la ejecución de la función incognita para ver qué haría 
+-- sobre la lista de números enteros incluida en su invocación
+--incognita l = foldl (\ (y:z:xs) x -> if odd x then [y++[x],z]  else [y,z++[x]])[[],[]] [14,5,8,7,9,16]
+
+
 --3. Desarrolla diferentes funciones que hagan uso de alguna de las versiones de la función fold y que:
 --a. Reciba una lista de enteros y devuelva la suma de sus dobles.
+dobles:: [Int]->[Int]
+dobles xs = foldl(\a b->  2*b:a)[] xs
 --b. Reciba una lista de enteros y devuelva la suma de sus cuadrados.
---c. Reciba una lista de enteros y un entero y lo inserte al final de dicha lista.
---d. Reciba una lista y un número entero y devuelva dicha lista eliminando las apariciones de ese número entero
+cuadrado::[Int]->Int
+cuadrado xs = sum(foldl(\a b-> b^2:a)[]xs)
 
--- Guion
+cuadrado'::[Int]->Int
+cuadrado' xs = sum(foldr(\a b-> a^2:b)[] xs)
+--c. Reciba una lista de enteros y un entero y lo inserte al final de dicha lista.
+finalL::[Int]->Int->[Int]
+finalL xs x= foldl (\a b-> a++[b])[](xs++[x])
+
+finalR::[Int]->Int->[Int]
+finalR xs x = foldr (\a b-> a:b)[] (xs++[x])
+
+--d. Reciba una lista y un número entero y devuelva dicha lista eliminando las 
+-- apariciones de ese número entero
+aparicionesL::[Int]->Int->[Int]
+aparicionesL xs y=foldl(\a b -> if (b==y) then a else a++[b])[] xs
+
+aparicionesR::[Int]->Int->[Int]
+aparicionesR xs y=foldr(\a b-> if (a==y)then b else b++[a])[] xs
+
+-- EJERCICIOS HOJA 3
+--a) Se pide una función que dada una lista de racionales, 
+-- donde cada racional se define como dos números enteros (numerador y denominador), 
+-- y un número racional, devuelva otra lista con todos los racionales 
+-- equivalentes al dado. Realiza dos versiones del ejercicio:
+--1. Empleando type.
+--2. Empleando data.
+
+--Ejemplos de aplicación (si se utiliza type) serían:
+-- > equivalentes [(2,4),(3,5),(4,8)] (1,2)
+--[(2.0,4.0),(4.0,8.0)]
+-- > equivalents [(3,5)] (1,2)
+--[]
+--Ejemplos de aplicación (si se utiliza data) serían:
+-- > equivalentes[R(2,4),R(3,5),R(4,8)] (R(1,2))
+--[R (2.0,4.0),R (4.0,8.0)]
+-- > equivalentes [R(3,5)] (R(1,2))
+
+-- Tipo 1
+
+type Numerador= Int
+type Denominador= Int
+type Racional=(Numerador,Denominador)
+
+equivalentes::[Racional]->Racional->[Racional]
+equivalentes = equivalentesAux []
+
+equivalentesAux :: [Racional]->[Racional]-> Racional ->[Racional]
+equivalentesAux r [] _= r
+equivalentesAux' r (ra:ras) rae= equivalentesAux(if sonEquivalentes rae ra then r++[ra] else r)  ras rae
+
+ 
+ 
+sonEquivalentes::Racional->Racional->Bool
+sonEquivalentes(n1,d1)(n2,d2)=n1`rem`n2==0 && d1`rem`d2 ==0
+ 
+ 
+ -- Tipo 2
+data Rac=Ra{num::Integer,den::Integer}
+sonEquivalentes'::Rac->Rac->Bool
+sonEquivalentes'(Ra n1 d1)(Ra n2 d2)= n1 `rem`n2==0 && d1`rem`d2==0
+-- forma 2
+sonEquivalentes''::Rac->Rac->Bool
+sonEquivalentes'' ra1 ra2=(num ra1)`rem`(num ra2)==0 && (den ra1)`rem`(den ra2)==0
+ 
+--b) Se pide varias funciones para hacer lo siguiente:
+--1. Función que dado un punto de coordenadas y una dirección (Norte, Sur, Este u Oeste) 
+--mueva el punto hacia la dirección indicada. Un ejemplo de aplicación de la función sería:
+-- > mover Este (3,4) > mover Norte (3.5,9.2)
+--(4,4) (3.5,10.2)
+--version1 
+data Direccion=Norte|Sur|Este|Oeste deriving Show
+type PuntoCardinal1 = (Float,Float)
+mover1::Direccion->PuntoCardinal1->PuntoCardinal1
+mover1 Norte (x,y)=(x,y+1)
+mover1 Sur (x,y)=(x+1,y)
+mover1 Este (x,y)=(x,y-1)
+mover1 Oeste (x,y)=(x-1,y)
+
+--version2
+data PuntoCardinal2=PC{x::Float,y::Float} deriving Show
+mover2::Direccion->PuntoCardinal2->PuntoCardinal2
+mover2 Norte (PC x y)= (PC x (y+1))
+mover2 Sur   (PC x y)= (PC (x+1) y)
+mover2 Este  (PC x y)= (PC (x-1) y)
+mover2 Oeste (PC x y)= (PC x (y-1))
+
+
+--2. Función que dados dos puntos de coordenadas indique cuál está más al sur. 
+-- Ejemplos de aplicación de la función son:
+-- > masAlSur (3,5) (4,6) > masAlSur (4.5,-6.2) (4.5,-7)
+--(3.0,5.0) (4.5,-7.0)
+
+--version1
+masAlSur::PuntoCardinal1->PuntoCardinal1->PuntoCardinal1
+masAlSur (x1,y1)(x2,y2)= if (x1>x2) then (x1,y1) else (x2,y2)  
+
+--version2
+
+masAlSur':: PuntoCardinal2->PuntoCardinal2->PuntoCardinal2
+masAlSur' pc1 pc2=if (y pc1)<(y pc2) then pc1 else pc2
+
+--3. Función que calcule la distancia entre dos puntos:
+-- > distancia (3,5) (6,7)
+
+-- version1
+distancia1::PuntoCardinal1->PuntoCardinal1->Float
+distancia1 (x1,y1)(x2,y2)=sqrt((x2-x1)^2 + (y2-y1)^2)
+
+
+-- version2
+distancia2::PuntoCardinal2->PuntoCardinal2->Float
+distancia2 pc1 pc2= sqrt(((x pc2)-(x pc2))^2+((y pc2)-(y pc2))^2)
+
+
+
+--4. Función que dado un punto y una lista de direcciones, 
+--retorne el camino que forman todos los puntos después 
+-- de cada movimiento sucesivo desde el punto original:
+-- >camino (3.2,5.5) [Sur,Este,Este,Norte,Oeste]
+--[(3.2,4.5),(4.2,4.5),(5.2,4.5),(5.2,5.5),(4.2,5.5)]
+
+
+camino::PuntoCardinal2->[Direccion]->[PuntoCardinal2]
+camino= caminoAux[]
+
+caminoAux::[PuntoCardinal2]->PuntoCardinal2->[Direccion]->[PuntoCardinal2]
+caminoAux r _ []= r
+caminoAux r pc (d:ds)= caminoAux (r ++ [pf])pf ds
+	where
+		pf= mover2 d pc
+
+
+
+
+--c) La empresa RealTimeSolutions, Inc. está trabajando en un controlador para una central domótica.
+--   El controlador recibe información de termostatos situados en diferentes habitaciones de la vivienda y basándose en esta información, 
+--   activa o desactiva el aire acondicionado en cada una de las habitaciones. Los termostatos pueden enviar la información sobre la temperatura 
+--   en grados Celsius o Fahrenheit.
+--   A su vez, los aparatos de aire acondicionado reciben dos tipos de órdenes: apagar y encender (on y off). Se pide:
+
+--1. Definir un tipo de datos para representar las temperaturas en ambos tipos de unidades.
+  
+type Celsius= Float;
+type Faranheaid = Float;
+data Temperatura = Celsius|Faranheaid deriving Show
+data Temperatura'= Celsius' Float|Fahrenheit' Float deriving Show
+
+     
+--2. Definir una función convert que dada una temperatura en grados Celsius la convierta a grados Fahrenheit y viceversa. 
+--(Conversión de C a F: f = c * 9/5 + 32; conversión de F a C: c = (f – 32) * 5/9.)
+-- Type
+conversionCF::Celsius->Faranheaid
+conversionCF f=   (f-32) * 5/9 
+
+conversionFC::Faranheaid->Celsius
+conversionFC c=c * (9 / 5) + 32
+
+-- Data
+convertCtoF'::Temperatura'->Temperatura'
+convertCtoF'(Celsius' c)=(Fahrenheit' (c * (9 / 5) + 32))
+
+convertFtoC'::Temperatura'->Temperatura'
+convertFtoC'(Fahrenheit' f)= (Celsius'(f - 32 * (5 / 9)))
+
+--3. Definir un tipo de datos para representar las órdenes a los aparatos de a/a.
+
+data OrdenaAA = On|Off deriving Show
+--4. Definir una función action que dada una temperatura en cierta habitación determine la acción a realizar 
+--sobre el aparato de a/a de dicha habitación. El controlador debe encender el aparato si la temperatura excede de 28ºC. 
+-- Ejemplos de aplicación:
+-- > action(Celsius(25)) > action(Fahrenheit(83.5))
+--On Off
+
+action::Temperatura'->OrdenaAA
+action  (Celsius' c)= if c>28 then  On else  Off
+action  (Fahrenheit' f)=  action(convertFtoC' (Fahrenheit' f))
+
+--d) Definir un tipo moneda para representar euros y dólares USA. Definir una función que convierta
+-- entre ambas monedas sabiendo que el factor de conversión de euros a dólares es 1.14.
+-- conver (Dollar' 3.3)
+type Dolar= Float
+type Euro= Float
+
+data Moneda = Dolar' Float| Euro' Float
+
+-- type
+conversion::Euro->Dolar
+conversion e= 1.4*e
+
+-- data
+conversion'::Moneda->Moneda
+conversion'(Euro' e)= (Dolar' (e*1.4))
+ 
+--e) Dada el siguiente tipo de datos recursivo que representa expresiones aritméticas:
+data Expr = Valor Integer
+ |Expr :+: Expr
+ |Expr :-: Expr
+ |Expr :*: Expr deriving Show
+ 
+--e.1) Se pide una función para calcular el valor de una expresión.
+
+--e.2) Se pide una función para calcular el número de constantes de una expresión.
+
+--f) Dado el siguiente tipo de datos que representa un árbol binario:
+
+-- EJERCICIOS HOJA 4
+--Listado de ejercicios para poner en práctica los conocimientos adquiridos sobre definición de tipos sinónimos y nuevos tipos,
+-- tipos recursivos y tipos recursivos polimórficos. Y también sobre el manejo de clases de tipos en Haskell.
+--Ejercicios:
+--a) Definir una función que dado un día de la semana, indique si éste es o no laborable. Para representar 
+--   el día de la semana se deberá crear un nuevo tipo enumerado.
+
+
+
+--b) Se quiere ordenar los elementos de una lista (cuyos elementos son comparables) mediante el algoritmo del quicksort.
+
+
+--c) Se pide implementar una función que dada un número (de cualquier tipo que soporte la operación de división) 
+--   y una lista de números del mismo tipo, divida a ese número por cada uno de los elementos contenidos 
+--   en la lista y devuelva una lista con el resultado.
+--Ejemplos de aplicación de la función son:
+-- > divisiones 5 [1,2,3]
+--[Just 5,Just 2,Just 1]
+-- > divisiones 5 [1,2,3,0,9,10]
+--[Just 5,Just 2,Just 1,Nothing,Just 0,Just 0]
+
+
+--d) Dado un nuevo tipo de datos para representar un árbol binario de cualquier tipo, definido como sigue:
+--data Arbol a = AV | Rama (Arbol a) a (Arbol a) deriving Show
+--Se pide definir una función que visualice el árbol por pantalla de una determinada forma: separando cada hijo izquierdo y derecho por “|”, la raíz entre guiones y cada nivel diferente del árbol por “( )”. Ejemplos de aplicación de la función sería los siguientes:
+-- > mostrarArbol (Rama (Rama (Rama AV 60 AV) 8 AV) 5 (Rama AV 4 AV))
+--"((60)|-8-|())|-5-|(4)"
+-- > mostrarArbol (Rama AV 5 (Rama AV 4 AV))
+--"()|-5-|(4)"
+--¿Sería equivalente a declarar el nuevo tipo de datos Arbol como una instancia de la clase Show?
+
+
+---e) Se quiere poder mostrar por pantalla los datos de los estudiantes matriculados en una universidad que pertenezcan
+--  a alguna de las asociaciones de ésta (culturales, deportivas,
+--de representación estudiantil, etc.). Para ello se deberán crear nuevos tipos de datos que representen:
+--Estudiante, de cada uno se debe disponer del nombre y titulación
+ --Titulación, que pueden ser tres: Grado II, Grado II_ADE, Grado ADE
+--Lista de estudiantes matriculadosLista de estudiantes que pertenecen a asociaciones
+--Un ejemplo de aplicación de la función que se pide podría ser:
+-- > mostrarAlumnosAsociaciones(listaMatriculados,listaAsociaciones)
+--"(Carlos Calle,GradoADE_II)(Irene Plaza,GradoADE)"
+--Donde Carlos Calle e Irene Plaza son los únicos estudiantes matriculados que pertenecen a algún tipo de asociación en la universidad.
+---- 
+
+--f) Se quiere poder representar una fecha de la siguiente forma: dd/mm/aaaa, para ello se deberá crear 
+-- un nuevo tipo de datos en Haskell. Por ejemplo, si se crea un nuevo tipo de datos cuyo constructor de datos es Fecha, en el intérprete 
+-- al poner fechas concretas nos devolvería la representación de la fecha que hayamos definido:
+-- > Fecha 10 10 2013 > Fecha 24 12 2012
+--10/10/2013 24/12/2012
+
+
+--g) Teniendo en cuenta el nuevo tipo de datos Fecha definido anteriormente, se pide una función 
+-- que sea capaz de comparar dos fechas. Ejemplos de aplicación de la función serían:
+-- > mismaFecha (Fecha 10 10 2013) (Fecha 10 10 2013)
+--True
+-- > mismaFecha (Fecha' 10 11 2013) (Fecha' 10 10 2013)
+--False
+
+
+--h) Teniendo en cuenta la definición de la función qs del apartado (b) de este listado de ejercicios, se pide ordenar una lista de fechas mediante quicksort. Ejemplos de aplicación de la función serían:
+-- > qs [(Fecha 10 10 2013), (Fecha 24 12 2012), (Fecha 10 09 2013), (Fecha 12 12 2013)]
+--[24/12/2012,10/9/2013,10/10/2013,12/12/2013]
+
+  
+--instance Ord Fecha' where
+ -- (<) (Fecha' d1 m1 a1) (Fecha' d2 m2 a2)
+  --  | a1 < a2 = True
+ --   | a1 == a2 && m1 < m2 = True
+ --   | a1 == a2 && m1 == m2 && d1 < d2 = True
+  --  | otherwise = False
+
+
+
+
+--i) Se pide crear una nueva clase de tipos, llamada Coleccion, para representar colecciones de datos de cualquier tipo, donde los tipos pertenecientes a esta clase tendrán el siguiente comportamiento:
+--esVacia: función para saber si la colección está vacía.
+--insertar: insertará un nuevo elemento en la colección.
+--primero: devolverá el primer elemento de la colección.
+--eliminar: eliminará un elemento de la colección.
+--size: devolverá el número de elementos de la colección.
+--Algunas de las funciones anteriores variarán su implementación en función del tipo de colección particular que sea instancia de la clase Coleccion. Por ello, se pide crear dos instancias diferentes de esta clase para los dos nuevos tipos de datos que se presentan a continuación:
+--data Pila a = Pil [a] deriving Show
+--data Cola a = Col [a] deriving Show
+--El primero de ellos representa una estructura de datos LIFO con elementos de tipo a. El segundo representa una estructura de datos FIFO de elementos de tipo a.
+--Ejemplos de aplicación de las funciones para ambos tipos de datos serían:
+-- > insertar 10 (Col [1,2,3,4])
+--Col [1,2,3,4,10]
+-- > insertar 10 (Pil [1,2,3,4])
+--Pil [1,2,3,4,10]
+-- > primero (Col [1,2,3,4,10])
+--1
+-- > primero (Pil [1,2,3,4,10])
+--10
+-- > eliminar (Col [1,2,3,4,10])
+--Col [2,3,4,10]
+-- > eliminar (Pil [1,2,3,4,10])
+--Pil [1,2,3,4]
+
+
+
+
+-- insertar 10 (Pil [1,2,3,4])

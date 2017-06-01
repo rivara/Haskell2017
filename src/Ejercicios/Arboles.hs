@@ -1,0 +1,75 @@
+
+module Arboles where
+--Ejercicios Árboles
+--Dada la siguiente definición de tipos:
+--Ejercicio 1
+--Implementad una función que devuelva qué altura tiene un árbol.
+--Ejercicio 2
+--Implementad una función que devuelva el número de nodos de un árbol.
+--Ejercicio 3
+--Implementad una función que devuelva cuántas ramas tiene un árbol.
+--Ejercicio 4
+--Implementad una función que dado un árbol y un elemento determine si éste último
+--está en una hoja.
+--Ejercicio 5
+--Implementad una función que dado un árbol devuelva una lista con los elementos que
+--ocupen una hoja del mismo.
+--Ejercicio 6
+--Implementad una función que dado un árbol y dos números enteros, correspondientes
+--a dos niveles del árbol, devuelva una lista con los elementos situados entre los dos
+--niveles.
+--Ejercicio 7
+--Implementad una función que dado un árbol lo devuelva eliminando sus hojas.
+--data Arbol a = AVacio | Nodo (Arbol a) a (Arbol a)
+--ASIGNATURA: PROGRAMACIÓN DECLARATIVA
+--Avenida Alcalde de Móstoles 33 (Posterior) 28922 Móstoles
+--(Madrid)
+--91 664 67 20 - 717 716 540
+--info@academia-atica.com www.academia-atica.com
+--TITULACIÓN: GRADO EN INGENIERÍA INFORMÁTICA
+--PROFESORES: JAVIER VERGARA IGUAL
+--EJERCICIOS:
+--ÁRBOLES Y GRAFOS
+--Ejercicio 8
+--Implementad una función que determine si un árbol es zurdo. Un árbol es zurdo si se
+--da alguna de las siguientes condiciones:
+--• Es un árbol vacío
+--• Es un nodo hoja
+--• Sus hijos izquierdo y derecho son zurdos y más de la mitad de sus
+--descendientes están en el hijo izquierdo
+--Ejercicio 9
+--Implementad una función que dado un árbol devuelva el número de nodos que tienen
+--vacío su hijo derecho.
+--Ejercicio 10
+--Implementad una función que dado un árbol determine si es un árbol binario de
+--búsqueda.
+--Ejercicios Grafos
+--Dada la siguiente definición de tipos:
+--Ejercicio 1
+--Implementad una función que devuelva una lista con los elementos (vértices) de un
+--grafo.
+--Ejercicio 2
+--Implementad una función que devuelva una lista con los arcos de un grafo,
+--considerando que éste es dirigido. Nota: Sería conveniente definir un tipo para
+--representar un arco.
+--data ListaAdyacencia a = LAVacia | LA a (ListaAdyacencia a)
+--data Grafo a = GVacio | G a (ListaAdyacencia a) (Grafo a)
+--ASIGNATURA: PROGRAMACIÓN DECLARATIVA
+--Avenida Alcalde de Móstoles 33 (Posterior) 28922 Móstoles
+--(Madrid)
+--91 664 67 20 - 717 716 540
+--info@academia-atica.com www.academia-atica.com
+--TITULACIÓN: GRADO EN INGENIERÍA INFORMÁTICA
+--PROFESORES: JAVIER VERGARA IGUAL
+--EJERCICIOS:
+--ÁRBOLES Y GRAFOS
+--Ejercicio 3
+--Implementad una función que dado un grafo dirigido y un elemento devuelva una lista
+--con los elementos adyacentes de este último.
+--Ejercicio 4
+--Implementad una función que dado un grafo y dos elementos determine si son
+--adyacentes.
+--Ejercicio 5
+--Dado un grafo dirigido, implementad una función que devuelva una lista con los nodos
+--sumidero. Un nodo sumidero es aquel que no posee arcos de salida, sino solo arcos de
+--entrada.
