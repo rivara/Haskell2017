@@ -551,27 +551,63 @@ conversion'(Euro' e)= (Dolar' (e*1.4))
  
 --e) Dada el siguiente tipo de datos recursivo que representa expresiones aritméticas:
 data Expr = Valor Integer
- |Expr :+: Expr
- |Expr :-: Expr
- |Expr :*: Expr deriving Show
+	|Expr :+: Expr
+	|Expr :-: Expr
+	|Expr :*: Expr deriving Show
  
 --e.1) Se pide una función para calcular el valor de una expresión.
+calcularExp::Expr->Integer
+calcularExp(Valor v) = v
+calcularExp(expr1:+:expr2)=(calcularExp expr1) + (calcularExp expr2)
+calcularExp(expr1:-:expr2)=(calcularExp expr1) - (calcularExp expr2)
+calcularExp(expr1:*:expr2)=(calcularExp expr1) * (calcularExp expr2)
+
 
 --e.2) Se pide una función para calcular el número de constantes de una expresión.
+calcularConstante::Expr->Integer
+calcularConstante(Valor v)=0
+calcularConstante(expr1:+:expr2)=1+(calcularConstante expr1)+(calcularConstante expr2)
+calcularConstantes(expr1:-:expr2)=1+(calcularConstante expr1)-(calcularConstante expr2)
+calcularConstantes(expr1:*:expr2)=1+(calcularConstante expr1)*(calcularConstante expr2)
 
 --f) Dado el siguiente tipo de datos que representa un árbol binario:
+--espejo (Rama (Rama (Rama AV 60 AV) 8 AV) 5 (Rama AV 4 AV))
+-- Rama (Rama AV 4 AV) 5 (Rama AV 8 (Rama AV 60 AV))
+
+
+data Arbol a = AV | Rama (Arbol a) a (Arbol a) deriving Show
+
+espejo::Arbol a->Arbol a
+espejo AV = AV
+espejo (Rama AV r AV)=Rama AV r AV
+espejo (Rama i r d)= (Rama ed r ei)
+		where ei =espejo i ; ed= espejo d 
+
 
 -- EJERCICIOS HOJA 4
---Listado de ejercicios para poner en práctica los conocimientos adquiridos sobre definición de tipos sinónimos y nuevos tipos,
--- tipos recursivos y tipos recursivos polimórficos. Y también sobre el manejo de clases de tipos en Haskell.
---Ejercicios:
---a) Definir una función que dado un día de la semana, indique si éste es o no laborable. Para representar 
---   el día de la semana se deberá crear un nuevo tipo enumerado.
 
+--a) Definir una función que dado un día de la semana, indique si éste es o no laborable. 
+-- Para representar el día de la semana se deberá crear un nuevo tipo enumerado.
 
+data Dia= Lunes|Martes|Miercoles|Jueves|Viernes|Sabado deriving (Show,Eq)
 
---b) Se quiere ordenar los elementos de una lista (cuyos elementos son comparables) mediante el algoritmo del quicksort.
+laborable::Dia->Bool
+laborable x= case x of
+		 Lunes -> True 
+		 Martes -> True 
+		 Miercoles -> True 
+		 Jueves -> True 
+		 Viernes -> True 
+		 otherwise -> False   
 
+--b) Se quiere ordenar los elementos de una lista (cuyos elementos son comparables)
+-- mediante el algoritmo del quicksort.
+quickshort::(Ord a)=>[a]->[a]
+quickshort[]=[]
+quickshort (e:es)= quickshort ordenI ++[e]++ quickshort ordenD
+	where 
+		ordenI=[n|n<-es,n<e]
+		ordenD=[n|n<-es,n>=e]
 
 --c) Se pide implementar una función que dada un número (de cualquier tipo que soporte la operación de división) 
 --   y una lista de números del mismo tipo, divida a ese número por cada uno de los elementos contenidos 
@@ -581,6 +617,7 @@ data Expr = Valor Integer
 --[Just 5,Just 2,Just 1]
 -- > divisiones 5 [1,2,3,0,9,10]
 --[Just 5,Just 2,Just 1,Nothing,Just 0,Just 0]
+
 
 
 --d) Dado un nuevo tipo de datos para representar un árbol binario de cualquier tipo, definido como sigue:
@@ -663,3 +700,74 @@ data Expr = Valor Integer
 
 
 -- insertar 10 (Pil [1,2,3,4])
+
+
+
+
+
+--GUION
+--ejercicio4
+-- if
+contiene:: Int->Bool
+contiene x=  if ((x<9)&&(x>0)) then True else False
+
+-- case			
+entre0y9 :: Integer -> Bool
+entre0y9 x = case x of
+	1 -> True
+	2 -> True
+	3 -> True
+	4 -> True
+	5 -> True
+	6 -> True
+	7 -> True
+	8 -> True
+	otherwise -> False
+
+-- guards
+contiene':: Int->Bool
+contiene' x |(x > 0) && (x < 9) = True
+		    | otherwise = False	
+ 
+cuad:: Int->Int->Int
+cuad x y  = (x^2 + y^2)
+
+--BISIESTOS
+ 
+divisible::(Int,Int)-> Bool
+divisible(t,n) = t `rem` n == 0
+
+bisiesto :: Int->Bool
+bisiesto a = divisible(a,4) && (not(divisible(a,100)) || divisible(a,400))
+
+meses ::Int->[Int]
+meses a = [31,feb,31,30,31,30,31,31,30,31,30,31]
+		where  feb |bisiesto a = 29
+				   |otherwise = 28
+ 
+
+-- ModuleName>insertarEn(7,[1,2,3,4],0)     [7,1,2,3,4]
+insertarEn :: (Int, [Int],Int) -> [Int]
+insertarEn (x, lista, n) = let (ys,zs) = (take n lista, drop n lista) in ys++x:zs
+
+--suma
+sumi::[Int]->Int
+sumi[]=0
+sumi(x:xs)=x+sumi xs
+
+
+contarDigitos x = contarDigitosRecCola(x,1)
+contarDigitosRecCola :: (Integer,Integer) -> Integer
+contarDigitosRecCola(x,c) = if x `div`10 == 0 then c
+							else contarDigitosRecCola(x `div`10,c+1)
+
+
+--Problemas
+--mezclarEnTernas::([a],[b])->[(a,b,b)]
+--mezclarEnTernas([],_) = []
+--mezclarEnTernas(_,[]) = []
+--mezclarEnTernas(_,x:[]) = [] -- Un único elemento no vale
+--mezclarEnTernas(c1:r1,c2:c3:r2) = (c1,c2,c3): mezclarEnTernas(r1,r2)
+
+
+
