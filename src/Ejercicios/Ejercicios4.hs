@@ -1,6 +1,6 @@
-
 module Ejercicios.Ejercicios4 where
 import Data.Maybe
+--PROBLEMA INSTANCIAR LA CLASE ORD
 --Listado de ejercicios para poner en práctica los conocimientos adquiridos sobre definición de tipos sinónimos y nuevos tipos,
 -- tipos recursivos y tipos recursivos polimórficos. Y también sobre el manejo de clases de tipos en Haskell.
 --Ejercicios:
@@ -74,14 +74,15 @@ mostrarArbol(Rama hizq r hder)="(" ++(mostrarArbol hizq)++ "|-" ++ show r  ++ "-
 --f) Se quiere poder representar una fecha de la siguiente forma: dd/mm/aaaa, para ello se deberá crear 
 -- un nuevo tipo de datos en Haskell. Por ejemplo, si se crea un nuevo tipo de datos cuyo constructor de datos es Fecha, en el intérprete 
 -- al poner fechas concretas nos devolvería la representación de la fecha que hayamos definido:
--- > Fecha 10 10 2013 > Fecha 24 12 2012
---10/10/2013 24/12/2012
+-- > ver 10 10 2013
 
-data Fecha = Fecha Integer Integer Integer
-data Fecha' =Fecha'{dia::Integer,mes::Integer,anio::Integer}
+data Fecha =Fecha{dia::Integer,mes::Integer,anio::Integer}
 
-instance Show Fecha' where
- show (Fecha' d m a)= show d ++"/"++ show m ++"/"++ show a
+instance Show Fecha where
+ show (Fecha d m a)= show d ++"/"++ show m ++"/"++ show a
+
+ver:: Integer->Integer->Integer ->Fecha
+ver  d m a = (Fecha d m a) 
 
 
 --g) Teniendo en cuenta el nuevo tipo de datos Fecha definido anteriormente, se pide una función 
@@ -90,23 +91,21 @@ instance Show Fecha' where
 --True
 -- > mismaFecha (Fecha' 10 11 2013) (Fecha' 10 10 2013)
 --False
-mismaFecha::Fecha'->Fecha'->Bool
-mismaFecha (Fecha' d1 m1 a1)(Fecha' d2 m2 a2)= d1==d2 && m1==m2 && a1==a2 
 
---h) Teniendo en cuenta la definición de la función qs del apartado (b) de este listado de ejercicios, se pide ordenar una lista de fechas mediante quicksort. Ejemplos de aplicación de la función serían:
--- > qs [(Fecha 10 10 2013), (Fecha 24 12 2012), (Fecha 10 09 2013), (Fecha 12 12 2013)]
---[24/12/2012,10/9/2013,10/10/2013,12/12/2013]
-instance Eq Fecha' where
-  	(==) (Fecha' d1 m1 a1) (Fecha' d2 m2 a2) = d1 == d2 && m1 == m2 && a1 == a2
-  
---instance Ord Fecha' where
- -- (<) (Fecha' d1 m1 a1) (Fecha' d2 m2 a2)
-  --  | a1 < a2 = True
- --   | a1 == a2 && m1 < m2 = True
- --   | a1 == a2 && m1 == m2 && d1 < d2 = True
-  --  | otherwise = False
+instance Eq Fecha where
+	(==) (Fecha d1 m1 a1) (Fecha d2 m2 a2) = d1 == d2 && m1 == m2 && a1 == a2
 
-(<=)(f1) (f2) = f1 < f2 || f1 == f2
+
+mismaFecha::Fecha->Fecha->Bool
+mismaFecha (Fecha d1 m1 a1)(Fecha d2 m2 a2)= d1==d2 && m1==m2 && a1==a2 
+
+
+
+
+
+
+
+
 
 
 --i) Se pide crear una nueva clase de tipos, llamada Coleccion, para representar colecciones de datos de cualquier tipo, donde los tipos pertenecientes a esta clase tendrán el siguiente comportamiento:
@@ -133,7 +132,7 @@ instance Eq Fecha' where
 -- > eliminar (Pil [1,2,3,4,10])
 --Pil [1,2,3,4]
 
-
+-- polimorfica
 class Coleccion c where
  esVacia ::c a-> Bool
  insertar :: a-> c a -> c a
@@ -150,5 +149,22 @@ instance Coleccion Pila where
    primero (Pil p) = last p
    eliminar (Pil p)= (Pil(init p))
    size (Pil p)= length p
+ 
 
--- insertar 10 (Pil [1,2,3,4])
+instance Coleccion Cola where
+  esVacia(Col c)=null c
+  insertar e (Col c)=(Col([e]++c))
+  primero (Col c)=head c
+  eliminar (Col c)=(Col(tail c))
+  size(Col c)= length c
+	
+-- pruebas
+-- pila
+-- esVacia (Pil[])
+-- insertar 'g' (Pil ['a','b','c','d'])
+-- primero (Pil ['a','b','c','d'])
+
+-- cola
+-- esVacia (Pil[])
+-- insertar 10 (Col [1,2,3,4])
+-- primero (Pil [1,2,3,4])
