@@ -1,16 +1,14 @@
---
---
---module PiensaEnHaskell.PiensaEnHaskell where
-----
-------1
+module PiensaEnHaskell.PiensaEnHaskell where
+
 ----Ejercicio 1.22.1. Las dimensiones de los rectángulos puede representarse por pares; por ejemplo,
 ----(5,3) representa a un rectángulo de base 5 y altura 3. Definir la función mayorRectangulo tal
 ----que (mayorRectangulo r1 r2) es el rectángulo de mayor área entre r1 y r2. Por ejemplo,
 ----mayorRectangulo (4,6) (3,7) == (4,6)
 ----mayorRectangulo (4,6) (3,8) == (4,6)
 ----mayorRectangulo (4,6) (3,9) == (3,9)
-----
-----
+
+mayorRectangulo::(Int,Int)->(Int,Int)->(Int,Int)
+mayorRectangulo (x,y)(z,t)=(x,t)
 ----------------------------------- Definiciones por comprensión
 ----
 ----2.1. Suma de los cuadrados de los n primeros números
@@ -20,46 +18,32 @@
 ----12 + 22 +    + n2. Por ejemplo,
 ----sumaDeCuadrados 3 == 14
 ----sumaDeCuadrados 100 == 338350
-----Solución:
-----sumaDeCuadrados :: Integer -> Integer
-----sumaDeCuadrados n = sum [x^2 | x <- [1..n]]
+
 ----2.2. Listas con un elemento replicado
 ----Ejercicio 2.2.1. Definir por comprensión la función
 ----replica :: Int -> a -> [a]
 ----tal que (replica n x) es la lista formada por n copias del elemento x. Por ejemplo,
 ----replica 3 True == [True, True, True]
 ----Nota: La función replica es equivalente a la predefinida replicate.
-----Solución:
-----replica :: Int -> a -> [a]
-----replica n x = [x | _ <- [1..n]]
+
 ----2.3. Triángulos aritméticos
 ----Ejercicio 2.3.1. Definir la función suma tal (suma n) es la suma de los n primeros números.
 ----Por ejemplo,
 ----suma 3 == 6
-----2.4. Números perfectos 41
-----Solución:
-----suma n = sum [1..n]
-----Otra definición es
-----suma' n = (1+n)*n 'div' 2
-----Ejercicio 2.3.2. Los triángulo aritmético se forman como sigue
-----1
-----2 3
-----4 5 6
-----7 8 9 10
-----11 12 13 14 15
-----16 16 18 19 20 21
+
+
 ----Definir la función linea tal que (linea n) es la línea n–ésima de los triángulos aritméticos.
 ----Por ejemplo,
 ----linea 4 == [7,8,9,10]
 ----linea 5 == [11,12,13,14,15]
-----Solución:
-----linea n = [suma (n-1)+1..suma n]
+-
+
+
 ----Ejercicio 2.3.3. Definir la función triangulo tal que (triangulo n) es el triángulo aritmético
 ----de altura n. Por ejemplo,
 ----triangulo 3 == [[1],[2,3],[4,5,6]]
 ----triangulo 4 == [[1],[2,3],[4,5,6],[7,8,9,10]]
-----Solución:
-----triangulo n = [linea m | m <- [1..n]]
+
 ----2.4. Números perfectos
 ----Ejercicio 2.4.1. Un entero positivo es perfecto si es igual a la suma de sus factores, excluyendo
 ----el propio número. Definir por comprensión la función
@@ -67,8 +51,7 @@
 ----42 Capítulo 2. Definiciones por comprensión
 ----tal que (perfectos n) es la lista de todos los números perfectos menores que n. Por ejemplo,
 ----perfectos 500 == [6,28,496]
-----Solución:
-----perfectos :: Int -> [Int]
+
 ----perfectos n = [x | x <- [1..n], sum (init (factores x)) == x]
 ----donde (factores n) es la lista de los factores de n
 ----factores :: Int -> [Int]
@@ -82,11 +65,7 @@
 ----numeroAbundante 12 == True
 ----numeroAbundante 28 == False
 ----numeroAbundante 30 == True
-----Solución:
-----numeroAbundante :: Int -> Bool
-----numeroAbundante n = n < sum (divisores n)
-----divisores :: Int -> [Int]
-----divisores n = [m | m <- [1..n-1], n 'mod' m == 0]
+
 ----Ejercicio 2.5.2. Definir la función numerosAbundantesMenores tal que (numerosAbundantesMenores n)
 ----es la lista de números abundantes menores o iguales que n. Por ejemplo,
 ----numerosAbundantesMenores 50 == [12,18,20,24,30,36,40,42,48]
@@ -99,14 +78,10 @@
 ----todosPares 10 == True
 ----todosPares 100 == True
 ----todosPares 1000 == False
-----Solución:
-----todosPares :: Int -> Bool
-----todosPares n = and [even x | x <- numerosAbundantesMenores n]
+
 ----Ejercicio 2.5.4. Definir la constante primerAbundanteImpar que calcule el primer número
 ----natural abundante impar. Determinar el valor de dicho número.
-----Solución:
-----primerAbundanteImpar :: Int
-----primerAbundanteImpar = head [x | x <-[1..], numeroAbundante x, odd x]
+
 ----Su cálculo es
 ----ghci> primerAbundanteImpar
 ----945
@@ -116,14 +91,8 @@
 ----tal que (euler1 n) es la suma de todos los múltiplos de 3 ó 5 menores que n. Por ejemplo,
 ----euler1 10 == 23
 ----Calcular la suma de todos los múltiplos de 3 ó 5 menores que 1000.
-----Solución:
-----euler1 :: Integer -> Integer
-----euler1 n = sum [x | x <- [1..n-1], multiplo x 3 || multiplo x 5]
-----where multiplo x y = mod x y == 0
-----El cálculo es
-----ghci> euler1 1000
-----233168
-----44 Capítulo 2. Definiciones por comprensión
+
+
 ----2.7. Número de pares de naturales en un círculo
 ----Ejercicio 2.7.1. Definir la función
 ----circulo :: Int -> Int
@@ -132,80 +101,22 @@
 ----circulo 3 == 9
 ----circulo 4 == 15
 ----circulo 5 == 22
-----Solución:
-----circulo :: Int -> Int
-----circulo n = length [(x,y) | x <- [0..n], y <- [0..n], x^2+y^2 < n^2]
-----La eficiencia puede mejorarse con
-----circulo' :: Int -> Int
-----circulo' n = length [(x,y) | x <- [0..m], y <- [0..m], x^2+y^2 < n^2]
-----where m = raizCuadradaEntera n
-----donde (raizCuadradaEntera n) es la parte entera de la raíz cuadrada de n. Por ejemplo,
-----raizCuadradaEntera 17 == 4
-----raizCuadradaEntera :: Int -> Int
-----raizCuadradaEntera n = truncate (sqrt (fromIntegral n))
-----2.8. Aproximación del número e
-----Ejercicio 2.8.1. Definir la función aproxE tal que (aproXE n) es la lista cuyos elementos son
-----los términos de la sucesión
-----
-----1 + 1m
-----
-----desde 1 hasta n. Por ejemplo,
-----aproxE 1 == [2.0]
-----aproxE 4 == [2.0,2.25,2.37037037037037,2.44140625]
-----Solución:
-----aproxE n = [(1+1/m)**m | m <- [1..n]]
-----2.8. Aproximación del número e 45
-----Ejercicio 2.8.2. ¿Cuál es el límite de la sucesión
-----
-----1 + 1m
-----
----- ?
-----Solución: El límite de la sucesión es el número e.
-----Ejercicio 2.8.3. Definir la función errorE tal que (errorE x) es el menor número de términos
-----de la sucesión
-----
-----1 + 1m
-----
-----necesarios para obtener su límite con un error menor que x. Por
-----ejemplo,
-----errorAproxE 0.1 == 13.0
-----errorAproxE 0.01 == 135.0
-----errorAproxE 0.001 == 1359.0
-----Indicación: En Haskell, e se calcula como (exp 1).
-----Solución:
-----errorAproxE x = head [m | m <- [1..], abs((exp 1) - (1+1/m)**m) < x]
-----Ejercicio 2.8.4. El número e también se puede definir como la suma de la serie:
-----1
-----0!
----- +
-----1
-----1!
----- +
-----1
-----2!
----- +
-----1
-----3!
----- + . . .
+
+
 ----Definir la función aproxE' tal que (aproxE' n) es la aproximación de e que se obtiene sumando
 ----los términos de la serie hasta 1
 ----n! . Por ejemplo,
 ----aproxE' 10 == 2.718281801146385
 ----aproxE' 100 == 2.7182818284590455
-----Solución:
-----aproxE' n = 1 + sum [ 1 / factorial k | k <- [1..n]]
-----factorial n = product [1..n]
-----Ejercicio 2.8.5. Definir la constante e como 2,71828459.
-----Solución:
-----e = 2.71828459
+
 ----Ejercicio 2.8.6. Definir la función errorE' tal que (errorE' x) es el menor número de términos
 ----de la serie anterior necesarios para obtener e con un error menor que x. Por ejemplo,
 ----errorE' 0.1 == 3.0
 ----errorE' 0.01 == 4.0
 ----errorE' 0.001 == 6.0
 ----errorE' 0.0001 == 7.0
-----Solución:
-----errorE' x = head [n | n <- [0..], abs(aproxE' n - e) < x]
+
+
 ----46 Capítulo 2. Definiciones por comprensión
 ----2.9. Aproximación del límite
 ----Ejercicio 2.9.1. Definir la función aproxLimSeno tal que (aproxLimSeno n) es la lista cuyos
@@ -264,10 +175,10 @@
 ---- +
 ----1
 ----5
-----??
+---- ??
 ----1
 ----7
-----+    +
+---- +    +
 ----(??1)n
 ----2n + 1
 ----)
@@ -543,8 +454,8 @@
 ----Solución:
 ----menorDivisible :: Integer -> Integer -> Integer
 ----menorDivisible a b
-----| a == b = a
-----| otherwise = lcm a (menorDivisible (a+1) b)
+--- | a == b = a
+--- | otherwise = lcm a (menorDivisible (a+1) b)
 ----Ejercicio 3.5.2. Definir la constante
 ----euler5 :: Integer
 ----tal que euler5 es el menor número divisible por los números del 1 al 20 y calcular su valor.
@@ -600,7 +511,7 @@
 ----elem' :: Eq a => a -> [a] -> Bool
 ----elem' x [] = False
 ----elem' x (y:ys) | x == y = True
-----| otherwise = elem' x ys
+--- |otherwise = elem' x ys
 ----3.9. Último elemento de una lista
 ----Ejercicio 3.9.1. Definir por recursión la función
 ----last' :: [a] -> a
@@ -663,7 +574,7 @@
 ----mezcla [] ys = ys
 ----mezcla xs [] = xs
 ----mezcla (x:xs) (y:ys) | x <= y = x : mezcla xs (y:ys)
-----| otherwise = y : mezcla (x:xs) ys
+--- |otherwise = y : mezcla (x:xs) ys
 ----3.14. Ordenación por mezcla 63
 ----3.14.2. Mitades de una lista
 ----Ejercicio 3.14.2. Definir la función
@@ -706,7 +617,7 @@
 ----prop_ordMezcla_ordenada xs = ordenada (ordMezcla xs)
 ----La comprobación es
 ----ghci> quickCheck prop_ordMezcla_ordenada
-----+++ OK, passed 100 tests.
+---- +++ OK, passed 100 tests.
 ----3.14.5. La ordenación por mezcla da una permutación
 ----Ejercicio 3.14.6. Definir por recursión la función
 ----borra :: Eq a => a -> [a] -> [a]
@@ -718,7 +629,7 @@
 ----borra :: Eq a => a -> [a] -> [a]
 ----borra x [] = []
 ----borra x (y:ys) | x == y = ys
-----| otherwise = y : borra x ys
+--- |otherwise = y : borra x ys
 ----3.14. Ordenación por mezcla 65
 ----3.14.6. Determinación de permutaciones
 ----Ejercicio 3.14.7. Definir por recursión la función
@@ -738,7 +649,7 @@
 ----prop_ordMezcla_pemutacion xs = esPermutacion (ordMezcla xs) xs
 ----La comprobación es
 ----ghci> quickCheck prop_ordMezcla_permutacion
-----+++ OK, passed 100 tests.
+---- +++ OK, passed 100 tests.
 ----
 ----------- comprension y recursion
 ----
@@ -775,7 +686,7 @@
 ----n >= 0 ==> sumaCuadradosR n == sumaCuadradosC n
 ----La comprobación es
 ----ghci> quickCheck prop_sumaCuadrados
-----+++ OK, passed 100 tests.
+---- +++ OK, passed 100 tests.
 ----70 Capítulo 4. Definiciones por recursión y por comprensión
 ----4.2. Número de bloques de escaleras triangulares
 ----Ejercicio 4.2.1. Se quiere formar una escalera con bloques cuadrados, de forma que tenga un número
@@ -812,7 +723,7 @@
 ----n > 0 ==> numeroBloquesC n == n+n^2
 ----La comprobación es
 ----ghci> quickCheck prop_numeroBloques
-----+++ OK, passed 100 tests.
+---- +++ OK, passed 100 tests.
 ----4.3. Suma de los cuadrados de los impares entre los primeros
 ----números
 ----Ejercicio 4.3.1. Definir, por recursión, la función
@@ -826,8 +737,8 @@
 ----sumaCuadradosImparesR :: Integer -> Integer
 ----sumaCuadradosImparesR 1 = 1
 ----sumaCuadradosImparesR n
-----| odd n = n^2 + sumaCuadradosImparesR (n-1)
-----| otherwise = sumaCuadradosImparesR (n-1)
+--- |odd n = n^2 + sumaCuadradosImparesR (n-1)
+--- |otherwise = sumaCuadradosImparesR (n-1)
 ----Ejercicio 4.3.2. Definir, por comprensión, la función
 ----sumaCuadradosImparesC :: Integer -> Integer
 ----tal que (sumaCuadradosImparesC n) es la suma de los cuadrados de los números impares desde
@@ -852,8 +763,8 @@
 ----digitosR :: Integer -> [Integer]
 ----digitosR n = reverse (digitosR' n)
 ----digitosR' n
-----| n < 10 = [n]
-----| otherwise = (n 'rem' 10) : digitosR' (n 'div' 10)
+--- |n < 10 = [n]
+--- |otherwise = (n 'rem' 10) : digitosR' (n 'div' 10)
 ----Ejercicio 4.4.2. Definir, por comprensión, la función
 ----digitosC :: Integer -> [Int]
 ----tal que (digitosC n) es la lista de los dígitos del número n. Por ejemplo,
@@ -870,7 +781,7 @@
 ----digitosR n == digitosC n
 ----La comprobación es
 ----ghci> quickCheck prop_dígitos
-----+++ OK, passed 100 tests.
+---- +++ OK, passed 100 tests.
 ----4.4.2. Suma de los dígitos de un número
 ----Ejercicio 4.4.4. Definir, por recursión, la función
 ----sumaDigitosR :: Integer -> Integer
@@ -881,8 +792,8 @@
 ----Solución:
 ----sumaDigitosR :: Integer -> Integer
 ----sumaDigitosR n
-----| n < 10 = n
-----| otherwise = n 'rem' 10 + sumaDigitosR (n 'div' 10)
+--- |n < 10 = n
+--- |otherwise = n 'rem' 10 + sumaDigitosR (n 'div' 10)
 ----Ejercicio 4.4.5. Definir, sin usar recursión, la función
 ----sumaDigitosNR :: Integer -> Integer
 ----tal que (sumaDigitosNR n) es la suma de los dígitos de n. Por ejemplo,
@@ -901,7 +812,7 @@
 ----sumaDigitosR n == sumaDigitosNR n
 ----La comprobación es
 ----ghci> quickCheck prop_sumaDígitos
-----+++ OK, passed 100 tests.
+---- +++ OK, passed 100 tests.
 ----4.4.3. Decidir si es un dígito del número
 ----Ejercicio 4.4.7. Definir la función
 ----esDigito :: Integer -> Integer -> Bool
@@ -953,8 +864,8 @@
 ----Solución:
 ----pegaNumerosR :: Integer -> Integer -> Integer
 ----pegaNumerosR x y
-----| y < 10 = 10*x+y
-----| otherwise = 10 * pegaNumerosR x (y 'div'10) + (y 'rem' 10)
+--- |y < 10 = 10*x+y
+--- |otherwise = 10 * pegaNumerosR x (y 'div'10) + (y 'rem' 10)
 ----Ejercicio 4.4.12. Definir, sin usar recursión, la función
 ----pegaNumerosNR :: Integer -> Integer -> Integer
 ----tal que (pegaNumerosNR x y) es el número resultante de “pegar” los números x e y. Por ejemplo,
@@ -972,7 +883,7 @@
 ----pegaNumerosR x y == pegaNumerosNR x y
 ----La comprobción es
 ----ghci> quickCheck prop_pegaNumeros
-----+++ OK, passed 100 tests.
+---- +++ OK, passed 100 tests.
 ----4.4.7. Primer dígito de un número
 ----Ejercicio 4.4.14. Definir, por recursión, la función
 ----primerDigitoR :: Integer -> Integer
@@ -982,8 +893,8 @@
 ----Solución:
 ----primerDigitoR :: Integer -> Integer
 ----primerDigitoR n
-----| n < 10 = n
-----| otherwise = primerDigitoR (n 'div' 10)
+--- |n < 10 = n
+--- |otherwise = primerDigitoR (n 'div' 10)
 ----Ejercicio 4.4.15. Definir, sin usar recursión, la función
 ----primerDigitoNR :: Integer -> Integer
 ----tal que (primerDigitoNR n) es el primer dígito de n. Por ejemplo,
@@ -999,7 +910,7 @@
 ----primerDigitoR x == primerDigitoNR x
 ----La comprobación es
 ----ghci> quickCheck prop_primerDigito
-----+++ OK, passed 100 tests.
+---- +++ OK, passed 100 tests.
 ----4.4.8. Último dígito de un número
 ----Ejercicio 4.4.17. Definir la función
 ----ultimoDigito :: Integer -> Integer
@@ -1035,7 +946,7 @@
 ----inverso n == inverso' n
 ----La comprobación es
 ----ghci> quickCheck prop_inverso
-----+++ OK, passed 100 tests.
+---- +++ OK, passed 100 tests.
 ----4.4. Operaciones con los dígitos de los números 79
 ----4.4.10. Decidir si un número es capicúa
 ----Ejercicio 4.4.21. Definir la función
@@ -1077,7 +988,7 @@
 ----Solución:
 ----primitivo :: Integer -> Integer
 ----primitivo n | n < 10 = n
-----| otherwise = primitivo (producto n)
+--- |otherwise = primitivo (producto n)
 ----donde (producto n) es el producto de los dígitos de n. Por ejemplo,
 ----producto 327 == 42
 ----producto :: Integer -> Integer
@@ -1087,7 +998,7 @@
 ----ejemplo, 3205 y 41 son equivalentes ya que
 ----3 + 2 + 0 + 5
 ----4
-----=
+---- =
 ----4 + 1
 ----2
 ----Definir la función
@@ -1146,7 +1057,7 @@
 ----cuadradosC xs == cuadradosR xs
 ----La comprobación es
 ----ghci> quickCheck prop_cuadrados
-----+++ OK, passed 100 tests.
+---- +++ OK, passed 100 tests.
 ----4.6. Números impares de una lista 83
 ----4.6. Números impares de una lista
 ----Ejercicio 4.6.1. Definir, por comprensión, la función
@@ -1164,7 +1075,7 @@
 ----imparesR :: [Integer] -> [Integer]
 ----imparesR [] = []
 ----imparesR (x:xs) | odd x = x : imparesR xs
-----| otherwise = imparesR xs
+--- |otherwise = imparesR xs
 ----Ejercicio 4.6.3. Comprobar con QuickCheck que ambas definiciones son equivalentes.
 ----Solución: La propiedad es
 ----prop_impares :: [Integer] -> Bool
@@ -1172,7 +1083,7 @@
 ----imparesC xs == imparesR xs
 ----La comprobación es
 ----ghci> quickCheck prop_impares
-----+++ OK, passed 100 test
+---- +++ OK, passed 100 test
 ----
 --
 --
@@ -1198,8 +1109,8 @@
 ----sumaDigitosR :: String -> Int
 ----sumaDigitosR [] = 0
 ----sumaDigitosR (x:xs)
-----| isDigit x = digitToInt x + sumaDigitosR xs
-----| otherwise = sumaDigitosR xs
+--- |isDigit x = digitToInt x + sumaDigitosR xs
+--- |otherwise = sumaDigitosR xs
 ----Ejercicio 5.1.3. Comprobar con QuickCheck que ambas definiciones son equivalentes.
 ----Solución: La propiedad es
 ----prop_sumaDigitos :: String -> Bool
@@ -1207,7 +1118,7 @@
 ----sumaDigitosC xs == sumaDigitosR xs
 ----La comprobación es
 ----ghci> quickCheck prop_sumaDigitos
-----+++ OK, passed 100 tests.
+---- +++ OK, passed 100 tests.
 ----5.2. Capitalización de una cadena 105
 ----5.2. Capitalización de una cadena
 ----Ejercicio 5.2.1. Definir, por comprensión, la función
@@ -1238,7 +1149,7 @@
 ----mayusculaInicial xs == mayusculaInicialR xs
 ----La comprobación es
 ----ghci> quickCheck prop_mayusculaInicial
-----+++ OK, passed 100 tests.
+---- +++ OK, passed 100 tests.
 ----106 Capítulo 5. Funciones sobre cadenas
 ----5.3. Título con las reglas de mayúsculas iniciales
 ----Ejercicio 5.3.1. Se consideran las siguientes reglas de mayúsculas iniciales para los títulos:
@@ -1258,7 +1169,7 @@
 ----igual que 4 y es p en minúscula en caso contrario.
 ----transforma :: String -> String
 ----transforma p | length p >= 4 = mayusculaInicial p
-----| otherwise = minuscula p
+--- |otherwise = minuscula p
 ----y (minuscula xs) es la palabra xs en minúscula.
 ----minuscula :: String -> String
 ----minuscula xs = [toLower x | x <- xs]
@@ -1281,7 +1192,7 @@
 ----prop_titulo xs = titulo xs == tituloR xs
 ----La comprobación es
 ----ghci> quickCheck prop_titulo
-----+++ OK, passed 100 tests.
+---- +++ OK, passed 100 tests.
 ----5.4. Búsqueda en crucigramas
 ----Ejercicio 5.4.1. Definir, por comprensión, la función
 ----buscaCrucigrama :: Char -> Int -> Int -> [String] -> [String]
@@ -1307,10 +1218,10 @@
 ----buscaCrucigramaR :: Char -> Int -> Int -> [String] -> [String]
 ----buscaCrucigramaR letra pos lon [] = []
 ----buscaCrucigramaR letra pos lon (p:ps)
-----| length p == lon && 0 <= pos && pos < length p && p !! pos == letra
-----= p : buscaCrucigramaR letra pos lon ps
-----| otherwise
-----= buscaCrucigramaR letra pos lon ps
+--- |length p == lon && 0 <= pos && pos < length p && p !! pos == letra
+---- = p : buscaCrucigramaR letra pos lon ps
+--- |otherwise
+---- = buscaCrucigramaR letra pos lon ps
 ----Ejercicio 5.4.3. Comprobar con QuickCheck que ambas definiciones son equivalentes.
 ----Solución: La propiedad es
 ----prop_buscaCrucigrama :: Char -> Int -> Int -> [String] -> Bool
@@ -1318,7 +1229,7 @@
 ----buscaCrucigrama letra pos lon ps == buscaCrucigramaR letra pos lon ps
 ----La comprobación es
 ----ghci> quickCheck prop_buscaCrucigrama
-----+++ OK, passed 100 tests.
+---- +++ OK, passed 100 tests.
 ----5.5. Posiciones de un carácter en una cadena
 ----Ejercicio 5.5.1. Definir, por comprensión, la función
 ----posiciones :: String -> Char -> [Int]
@@ -1340,7 +1251,7 @@
 ----where
 ----posicionesAux [] y n = []
 ----posicionesAux (x:xs) y n | x == y = n : posicionesAux xs y (n+1)
-----| otherwise = posicionesAux xs y (n+1)
+--- |otherwise = posicionesAux xs y (n+1)
 ----Ejercicio 5.5.3. Comprobar con QuickCheck que ambas definiciones son equivalentes.
 ----Solución: La propiedad es
 ----prop_posiciones :: String -> Char -> Bool
@@ -1348,7 +1259,7 @@
 ----posiciones xs y == posicionesR xs y
 ----La comprobación es
 ----ghci> quickCheck prop_posiciones
-----+++ OK, passed 100 tests.
+---- +++ OK, passed 100 tests.
 ----5.6. Decidir si una cadena es subcadena de otra
 ----Ejercicio 5.6.1. Definir, por recursión, la función
 ----contieneR :: String -> String -> Bool
@@ -1393,7 +1304,7 @@
 ----contieneR xs ys == contiene xs ys
 ----La comprobación es
 ----ghci> quickCheck prop_contiene
-----+++ OK, passed 100 tests.
+---- +++ OK, passed 100 tests.
 ----5.7. Codificación de mensajes
 ----Se desea definir una función que codifique mensajes tales como
 ----eres lo que piensas
@@ -1520,7 +1431,7 @@
 ----Solución:
 ----ceros :: Int -> Int
 ----ceros n | n 'rem' 10 == 0 = 1 + ceros (n 'div'10)
-----| otherwise = 0
+--- |otherwise = 0
 ----Ejercicio 5.8.2. Definir, sin recursión, la función
 ----ceros' :: Int -> Int
 ----tal que (ceros' n) es el número de ceros en los que termina el número n. Por ejemplo,
@@ -1542,8 +1453,8 @@
 --takeWhile' :: (a -> Bool) -> [a] -> [a]
 --takeWhile' _ [] = []
 --takeWhile' p (x:xs)
---| p x = x : takeWhile' p xs
---| otherwise = []
+-- | p x = x : takeWhile' p xs
+-- | otherwise = []
 --6.2. Complementario del segmento inicial verificando una
 --propiedad
 --Ejercicio 6.2.1. Redefinir por recursión la función
@@ -1555,8 +1466,8 @@
 --dropWhile' :: (a -> Bool) -> [a] -> [a]
 --dropWhile' _ [] = []
 --dropWhile' p (x:xs)
---| p x = dropWhile' p xs
---| otherwise = x:xs
+-- | p x = dropWhile' p xs
+-- | otherwise = x:xs
 --6.3. Concatenación de una lista de listas 119
 --6.3. Concatenación de una lista de listas
 --Ejercicio 6.3.1. Redefinir, por recursión, la función concat. Por ejemplo,
@@ -1601,8 +1512,8 @@
 --where m = media xs
 --divideMediaR' [] = ([],[])
 --divideMediaR' (x:xs) | x < m = (x:ys, zs)
---| x == m = (ys, zs)
---| x > m = (ys, x:zs)
+-- | x == m = (ys, zs)
+-- | x > m = (ys, x:zs)
 --where (ys, zs) = divideMediaR' xs
 --Ejercicio 6.4.2. Comprobar con QuickCheck que las tres definiciones anteriores divideMediaF,
 --divideMediaC y divideMediaR son equivalentes.
@@ -1614,7 +1525,7 @@
 --where d = divideMediaF xs
 --La comprobación es
 --ghci> quickCheck prop_divideMedia
---+++ OK, passed 100 tests.
+-- +++ OK, passed 100 tests.
 --6.4. División de una lista numérica según su media 121
 --Ejercicio 6.4.3. Comprobar con QuickCheck que si (ys,zs) es el par obtenido aplicándole la
 --función divideMediaF a xs, entonces la suma de las longitudes de ys y zs es menor o igual que
@@ -1626,7 +1537,7 @@
 --where (ys,zs) = divideMediaF xs
 --La comprobación es
 --ghci> quickCheck prop_longitudDivideMedia
---+++ OK, passed 100 tests.
+-- +++ OK, passed 100 tests.
 --Ejercicio 6.4.4. Comprobar con QuickCheck que si (ys,zs) es el par obtenido aplicándole la
 --función divideMediaF a xs, entonces todos los elementos de ys son menores que todos los
 --elementos de zs.
@@ -1637,7 +1548,7 @@
 --where (ys,zs) = divideMediaF xs
 --La comprobación es
 --ghci> quickCheck prop_divideMediaMenores
---+++ OK, passed 100 tests.
+-- +++ OK, passed 100 tests.
 --Ejercicio 6.4.5. Comprobar con QuickCheck que si (ys,zs) es el par obtenido aplicándole la
 --función divideMediaF a xs, entonces la media de xs no pertenece a ys ni a zs.
 --Nota: Usar la función notElem tal que (notElem x ys) se verifica si y no pertenece a ys.
@@ -1649,7 +1560,7 @@
 --(ys,zs) = divideMediaF xs
 --La comprobación es
 --ghci> quickCheck prop_divideMediaSinMedia
---+++ OK, passed 100 tests.
+-- +++ OK, passed 100 tests.
 --122 Capítulo 6. Funciones de orden superior
 --6.5. Segmentos cuyos elementos verifican una propiedad
 --Ejercicio 6.5.1. Definir la función
@@ -1690,8 +1601,8 @@
 --agrupa :: Eq a => [[a]] -> [[a]]
 --agrupa [] = []
 --agrupa xss
---| [] 'elem' xss = []
---| otherwise = primeros xss : agrupa (restos xss)
+-- | [] 'elem' xss = []
+-- | otherwise = primeros xss : agrupa (restos xss)
 --where primeros = map head
 --restos = map tail
 --6.8. Números con dígitos pares
@@ -1704,7 +1615,7 @@
 --Solución:
 --superpar :: Int -> Bool
 --superpar n | n < 10 = even n
---| otherwise = even n && superpar (n 'div' 10)
+-- | otherwise = even n && superpar (n 'div' 10)
 --Ejercicio 6.8.2. Definir, por comprensión, la función
 --superpar2 :: Int -> Bool
 --124 Capítulo 6. Funciones de orden superior
@@ -1771,12 +1682,12 @@
 --filtraAplica_3 :: (a -> b) -> (a -> Bool) -> [a] -> [b]
 --filtraAplica_3 f p [] = []
 --filtraAplica_3 f p (x:xs) | p x = f x : filtraAplica_3 f p xs
---| otherwise = filtraAplica_3 f p xs
+-- | otherwise = filtraAplica_3 f p xs
 --La definición por plegado es
 --filtraAplica_4 :: (a -> b) -> (a -> Bool) -> [a] -> [b]
 --filtraAplica_4 f p = foldr g []
 --where g x y | p x = f x : y
---| otherwise = y
+-- | otherwise = y
 --La definición por plegado usando lambda es
 --filtraAplica_4' :: (a -> b) -> (a -> Bool) -> [a] -> [b]
 --filtraAplica_4' f p =
@@ -1874,7 +1785,7 @@
 --where ys = reverse xs
 --La comprobación es
 --ghci> quickCheck prop_inversa
---+++ OK, passed 100 tests.
+-- +++ OK, passed 100 tests.
 --130 Capítulo 6. Funciones de orden superior
 --Ejercicio 6.12.6. Comparar la eficiencia de inversaP e inversaP' calculando el tiempo y el
 --espacio que usado en evaluar las siguientes expresiones:
@@ -1958,7 +1869,7 @@
 --filterR :: (a -> Bool) -> [a] -> [a]
 --filterR p [] = []
 --filterR p (x:xs) | p x = x : filterR p xs
---| otherwise = filterR p xs
+-- | otherwise = filterR p xs
 --6.17. Suma de las sumas de las listas de una lista de listas 133
 --Ejercicio 6.16.2. Redefinir, usando foldr, la función filter. Por ejemplo,
 --filterP (<4) [1,7,3,2] => [1,3,2]
@@ -1966,7 +1877,7 @@
 --filterP :: (a -> Bool) -> [a] -> [a]
 --filterP p = foldr g []
 --where g x y | p x = x:y
---| otherwise = y
+-- | otherwise = y
 --La definición por plegado y lambda es
 --filterP' :: (a -> Bool) -> [a] -> [a]
 --filterP' p = foldr (\x y -> if (p x) then (x:y) else y) []
@@ -2019,7 +1930,7 @@
 --borraR :: Eq a => a -> [a] -> [a]
 --borraR z [] = []
 --borraR z (x:xs) | z == x = borraR z xs
---| otherwise = x : borraR z xs
+-- | otherwise = x : borraR z xs
 --Ejercicio 6.18.2. Definir, mediante plegado, la función
 --borraP :: Eq a => a -> a -> [a]
 --tal que (borraP y xs) es la lista obtenida borrando las ocurrencias de y en xs. Por ejemplo,
@@ -2030,7 +1941,7 @@
 --borraP :: Eq a => a -> [a] -> [a]
 --borraP z = foldr f []
 --where f x y | z == x = y
---| otherwise = x:y
+-- | otherwise = x:y
 --La definición por plegado con lambda es es
 --borraP' :: Eq a => a -> [a] -> [a]
 --borraP' z = foldr (\x y -> if z==x then y else x:y) []
@@ -2108,7 +2019,7 @@
 --prop_colas xs = colas xs == tails xs
 --La comprobación es
 --ghci> quickCheck prop_colas
---+++ OK, passed 100 tests.
+-- +++ OK, passed 100 tests.
 --Ejercicio 6.21.3. Se denomina cabeza de una lista xs a una sublista no vacía de xs formada
 --por el primer elemento y los siguientes hasta uno dado. Por ejemplo, [1,2,3] es una cabeza de
 --[1,2,3,4,5].
@@ -2150,6 +2061,6 @@
 --prop_cabezas xs = cabezas xs == inits xs
 --La comprobación es
 --ghci> quickCheck prop_cabezas
---+++ OK, passed 100 tests.
---Nota. Un caso de estudio para las funciones de orden superior es el capítulo 16 “Codificación
---y transmisión de mensajes” (página 331).
+-- +++ OK, passed 100 tests.
+-- Nota. Un caso de estudio para las funciones de orden superior es el capítulo 16 “Codificación
+--  y transmisión de mensajes” (página 331)
