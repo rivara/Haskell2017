@@ -103,11 +103,6 @@ mismaFecha (Fecha d1 m1 a1)(Fecha d2 m2 a2)= d1==d2 && m1==m2 && a1==a2
 
 
 
-
-
-
-
-
 --i) Se pide crear una nueva clase de tipos, llamada Coleccion, para representar colecciones de datos de cualquier tipo, donde los tipos pertenecientes a esta clase tendrán el siguiente comportamiento:
 --esVacia: función para saber si la colección está vacía.
 --insertar: insertará un nuevo elemento en la colección.
@@ -168,3 +163,22 @@ instance Coleccion Cola where
 -- esVacia (Pil[])
 -- insertar 10 (Col [1,2,3,4])
 -- primero (Pil [1,2,3,4])
+
+
+------------ pruebas
+data Ent= Uno Int Int deriving Show
+cuenta ::Ent->Ent
+cuenta (Uno  x y )  = (Uno x y)
+
+
+-- en los tipos tupla los deriving son Obligatorios
+data Ent'= Un Int |Dos Int  deriving (Show ,Eq)
+cuenta2 ::Ent'->Ent'->Bool
+cuenta2 (Un x)(Dos y) =  (Dos y)==(Un x)
+
+
+-- los tipo registro los deriving son opcionales
+data Tip=Re{unos::Int,does::Int} 
+cuent::Tip->Tip->Bool
+cuent re1 re2= (unos re1)<(unos re2) 
+

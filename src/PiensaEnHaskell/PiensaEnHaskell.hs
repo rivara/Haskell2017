@@ -1,5 +1,7 @@
 module PiensaEnHaskell.PiensaEnHaskell where
 
+
+
 ----Ejercicio 1.22.1. Las dimensiones de los rectángulos puede representarse por pares; por ejemplo,
 ----(5,3) representa a un rectángulo de base 5 y altura 3. Definir la función mayorRectangulo tal
 ----que (mayorRectangulo r1 r2) es el rectángulo de mayor área entre r1 y r2. Por ejemplo,
@@ -8,35 +10,48 @@ module PiensaEnHaskell.PiensaEnHaskell where
 ----mayorRectangulo (4,6) (3,9) == (3,9)
 
 mayorRectangulo::(Int,Int)->(Int,Int)->(Int,Int)
-mayorRectangulo (x,y)(z,t)=(x,t)
------------------------------------ Definiciones por comprensión
-----
-----2.1. Suma de los cuadrados de los n primeros números
-----Ejercicio 2.1.1. Definir, por comprensión, la función
-----sumaDeCuadrados :: Integer -> Integer
-----tal que sumaDeCuadrados n) es la suma de los cuadrados de los primeros n números; es decir,
-----12 + 22 +    + n2. Por ejemplo,
-----sumaDeCuadrados 3 == 14
-----sumaDeCuadrados 100 == 338350
+mayorRectangulo (x,y)(z,t)= if (compara) then (x,y) else (z,t)
+	where
+		compara = x*y>z*t
 
-----2.2. Listas con un elemento replicado
-----Ejercicio 2.2.1. Definir por comprensión la función
-----replica :: Int -> a -> [a]
-----tal que (replica n x) es la lista formada por n copias del elemento x. Por ejemplo,
-----replica 3 True == [True, True, True]
-----Nota: La función replica es equivalente a la predefinida replicate.
+--DEFINICIONE POR COMPRESION
 
-----2.3. Triángulos aritméticos
+-- 2.1. Suma de los cuadrados de los n primeros números
+-- es la suma de los cuadrados de los primeros n números; es decir, 12 + 22 +    + n2. 
+-- sumaDeCuadrados 3 == 14
+-- sumaDeCuadrados 100 == 338350
+
+sumaDeCuadrados:: Int->Int
+sumaDeCuadrados x= sum [n^2|n<-[1..x]]
+
+
+-- Ejercicio 2.2.1. Definir por comprensión la función
+-- tal que (replica n x) es la lista formada por n copias del elemento x. Por ejemplo,
+-- replica 3 True == [True, True, True]
+-- Nota: La función replica es equivalente a la predefinida replicate.
+--IMPORTANTE
+replica :: Int -> a -> [a]
+replica x y= [y|_<-[1..x]]
+
+
+
 ----Ejercicio 2.3.1. Definir la función suma tal (suma n) es la suma de los n primeros números.
 ----Por ejemplo,
 ----suma 3 == 6
+
+suma:: Int->Int
+suma x= sum [x|x<-[1..x]]
+
+
 
 
 ----Definir la función linea tal que (linea n) es la línea n–ésima de los triángulos aritméticos.
 ----Por ejemplo,
 ----linea 4 == [7,8,9,10]
 ----linea 5 == [11,12,13,14,15]
--
+
+linea::Int->[Int]
+linea x= [n|n<-[suma(x-1)+1..suma(x)]]
 
 
 ----Ejercicio 2.3.3. Definir la función triangulo tal que (triangulo n) es el triángulo aritmético
@@ -44,18 +59,51 @@ mayorRectangulo (x,y)(z,t)=(x,t)
 ----triangulo 3 == [[1],[2,3],[4,5,6]]
 ----triangulo 4 == [[1],[2,3],[4,5,6],[7,8,9,10]]
 
+-- Version 1
+triangulo::Int->[[Int]]
+triangulo = trianguloAux[]
+
+trianguloAux::[[Int]]->Int->[[Int]]
+trianguloAux r 0 = r
+trianguloAux r y = [[n|n<-[suma(y-1)+1..suma(y)]]] ++ trianguloAux r  (y-1)
+
+-- Version 2
+triangulo':: Int->[[Int]]
+triangulo' n =[linea m | m <- [1..n]]
+
 ----2.4. Números perfectos
 ----Ejercicio 2.4.1. Un entero positivo es perfecto si es igual a la suma de sus factores, excluyendo
 ----el propio número. Definir por comprensión la función
 ----perfectos :: Int -> [Int]
+
 ----42 Capítulo 2. Definiciones por comprensión
 ----tal que (perfectos n) es la lista de todos los números perfectos menores que n. Por ejemplo,
 ----perfectos 500 == [6,28,496]
 
-----perfectos n = [x | x <- [1..n], sum (init (factores x)) == x]
-----donde (factores n) es la lista de los factores de n
-----factores :: Int -> [Int]
-----factores n = [x | x <- [1..n], n 'mod' x == 0]
+-- version 1
+perfectos::Int->Bool
+perfectos x= (x == sum (factores x)) 
+
+factores::Int->[Int]
+factores y= factorialAux[] (y-1) y
+
+factorialAux::[Int]->Int->Int->[Int]
+factorialAux r 0 _= r
+factorialAux r x y= if (y `mod` x ==0) then factorialAux (r++[x]) (x-1) y else factorialAux r (x-1) y
+
+-- version 2 
+
+---- perfectos' 500 == [6,28,496]
+perfectos' :: Int -> [Int]
+perfectos' n = [x | x <- [1..n], sum (init (factores' x)) == x]
+
+--donde (factores n) es la lista de los factores de n
+
+factores' :: Int -> [Int]
+factores' n = [x | x <- [1..n], n `mod` x == 0]
+
+
+
 ----2.5. Números abundantes
 ----Un número natural n se denomina abundante si es menor que la suma de sus divisores
 ----propios. Por ejemplo, 12 y 30 son abundantes pero 5 y 28 no lo son.
@@ -66,12 +114,16 @@ mayorRectangulo (x,y)(z,t)=(x,t)
 ----numeroAbundante 28 == False
 ----numeroAbundante 30 == True
 
+--version 1 
+numeroAbundante::Int->Bool
+numeroAbundante x = x > (sum[n|n<-[1..x-1],x `mod` n == 0])
+
 ----Ejercicio 2.5.2. Definir la función numerosAbundantesMenores tal que (numerosAbundantesMenores n)
 ----es la lista de números abundantes menores o iguales que n. Por ejemplo,
 ----numerosAbundantesMenores 50 == [12,18,20,24,30,36,40,42,48]
-----Solución:
-----numerosAbundantesMenores :: Int -> [Int]
-----numerosAbundantesMenores n = [x | x <- [1..n], numeroAbundante x]
+numerosAbundantesMenores::Int->[Int]
+numerosAbundantesMenores x=[n|n<-[1..x-1],x `mod` n == 0]
+
 ----2.6. Problema 1 del proyecto Euler 43
 ----Ejercicio 2.5.3. Definir la función todosPares tal que (todosPares n) se verifica si todos los
 ----números abundantes menores o iguales que n son pares. Por ejemplo,
@@ -79,28 +131,29 @@ mayorRectangulo (x,y)(z,t)=(x,t)
 ----todosPares 100 == True
 ----todosPares 1000 == False
 
+todosPares::Int->Bool
+todosPares x=and[even n|n <- numerosAbundantesMenores x]
+
 ----Ejercicio 2.5.4. Definir la constante primerAbundanteImpar que calcule el primer número
 ----natural abundante impar. Determinar el valor de dicho número.
-
 ----Su cálculo es
-----ghci> primerAbundanteImpar
-----945
-----2.6. Problema 1 del proyecto Euler
+----primerAbundanteImpar----945
+primerAbundanteImpar :: Int	
+primerAbundanteImpar = head [x | x <-[1..], numeroAbundante x, odd x]
+
 ----Ejercicio 2.6.1. Definir la función
 ----euler1 :: Integer -> Integer
 ----tal que (euler1 n) es la suma de todos los múltiplos de 3 ó 5 menores que n. Por ejemplo,
 ----euler1 10 == 23
-----Calcular la suma de todos los múltiplos de 3 ó 5 menores que 1000.
+-- version1
+euler::Int->Int
+euler x = sum[n|n<-[1..x-1], x`mod`5==0||x`mod`3==0 ]
 
+--version2
+euler1::Int->Int
+euler1 x=sum [n|n<-[1..x-1],multiplo x 3|| multiplo x 5]
+	where multiplo x y = mod x y == 0
 
-----2.7. Número de pares de naturales en un círculo
-----Ejercicio 2.7.1. Definir la función
-----circulo :: Int -> Int
-----tal que (circulo n) es la cantidad de pares de números naturales (x,y) que se encuentran
-----dentro del círculo de radio n. Por ejemplo,
-----circulo 3 == 9
-----circulo 4 == 15
-----circulo 5 == 22
 
 
 ----Definir la función aproxE' tal que (aproxE' n) es la aproximación de e que se obtiene sumando
@@ -108,99 +161,29 @@ mayorRectangulo (x,y)(z,t)=(x,t)
 ----n! . Por ejemplo,
 ----aproxE' 10 == 2.718281801146385
 ----aproxE' 100 == 2.7182818284590455
-
-----Ejercicio 2.8.6. Definir la función errorE' tal que (errorE' x) es el menor número de términos
-----de la serie anterior necesarios para obtener e con un error menor que x. Por ejemplo,
-----errorE' 0.1 == 3.0
-----errorE' 0.01 == 4.0
-----errorE' 0.001 == 6.0
-----errorE' 0.0001 == 7.0
+-- aproxE:: Int->[Int]
+-- aproxE n = [(1+1/m)**m | m <- [1..n]]
 
 
-----46 Capítulo 2. Definiciones por comprensión
-----2.9. Aproximación del límite
-----Ejercicio 2.9.1. Definir la función aproxLimSeno tal que (aproxLimSeno n) es la lista cuyos
-----elementos son los términos de la sucesión sen( 1m
-----)
-----1m
-----desde 1 hasta n. Por ejemplo,
-----aproxLimSeno 1 == [0.8414709848078965]
-----aproxLimSeno 2 == [0.8414709848078965,0.958851077208406]
-----Solución:
-----aproxLimSeno n = [sin(1/m)/(1/m) | m <- [1..n]]
-----Ejercicio 2.9.2. ¿Cuál es el límite de la sucesión sen( 1m
-----)
-----1m
----- ?
-----Solución: El límite es 1.
-----Ejercicio 2.9.3. Definir la función errorLimSeno tal que (errorLimSeno x) es el menor número
-----de términos de la sucesión sen( 1m
-----)
-----1m
-----necesarios para obtener su límite con un error menor que
-----x. Por ejemplo,
-----errorLimSeno 0.1 == 2.0
-----errorLimSeno 0.01 == 5.0
-----errorLimSeno 0.001 == 13.0
-----errorLimSeno 0.0001 == 41.0
-----Solución:
-----errorLimSeno x = head [m | m <- [1..], abs(1 - sin(1/m)/(1/m)) < x]
-----2.10. Cálculo del número p
-----Ejercicio 2.10.1. Definir la función calculaPi tal que (calculaPi n) es la aproximación del
-----número p calculada mediante la expresión
-----4  (1 ??
-----1
-----3
----- +
-----1
-----5
----- ??
-----1
-----7
----- +    +
-----(??1)n
-----2n + 1
-----)
-----Por ejemplo,
-----calculaPi 3 == 2.8952380952380956
-----calculaPi 300 == 3.1449149035588526
-----Solución:
-----2.11. Ternas pitagóricas 47
-----calculaPi n = 4 * sum [(-1)**x/(2*x+1) | x <- [0..n]]
-----Ejercicio 2.10.2. Definir la función errorPi tal que (errorPi x) es el menor número de
-----términos de la serie
-----4  (1 ??
-----1
-----3
----- +
-----1
-----5
----- ??
-----1
-----7
----- +    +
-----(??1)n
-----2n + 1
-----)
-----necesarios para obtener p con un error menor que x. Por ejemplo,
-----errorPi 0.1 == 9.0
-----errorPi 0.01 == 99.0
-----errorPi 0.001 == 999.0
-----Solución:
-----errorPi x = head [n | n <- [1..], abs (pi - (calculaPi n)) < x]
+
 ----2.11. Ternas pitagóricas
 ----Ejercicio 2.11.1. Una terna (x, y, z) de enteros positivos es pitagórica si x2 + y2 = z2. Usando
 ----una lista por comprensión, definir la función
-----pitagoricas :: Int -> [(Int,Int,Int)]
+----
 ----tal que (pitagoricas n) es la lista de todas las ternas pitagóricas cuyas componentes están
 ----entre 1 y n. Por ejemplo,
 ----pitagoricas 10 == [(3,4,5),(4,3,5),(6,8,10),(8,6,10)]
-----Solución:
-----pitagoricas :: Int -> [(Int,Int,Int)]
-----pitagoricas n = [(x,y,z) | x <- [1..n],
-----y <- [1..n],
-----z <- [1..n],
-----x^2 + y^2 == z^2]
+--pitagoricas :: Int -> [(Int,Int,Int)]
+
+
+
+pitagoricas :: Int -> [(Int,Int,Int)]
+pitagoricas n = [(x,y,z) | x <- [1..n],y <- [1..n],z <- [1..n], x^2 + y^2 == z^2]
+
+
+
+
+
 ----Ejercicio 2.11.2. Definir la función
 ----numeroDePares :: (Int,Int,Int) -> Int
 ----tal que (numeroDePares t) es el número de elementos pares de la terna t. Por ejemplo,
@@ -209,59 +192,61 @@ mayorRectangulo (x,y)(z,t)=(x,t)
 ----numeroDePares (3,6,7) == 1
 ----numeroDePares (3,6,4) == 2
 ----numeroDePares (4,6,4) == 3
-----Solución:
-----numeroDePares :: (Int,Int,Int) -> Int
-----numeroDePares (x,y,z) = sum [1 | n <- [x,y,z], even n]
+
+numeroDePares::(Int,Int,Int)->Int
+numeroDePares(x,y,z)= sum[1|n<-[x,y,z],even n]
+
+
 ----Ejercicio 2.11.3. Definir la función
 ----conjetura :: Int -> Bool
 ----tal que (conjetura n) se verifica si todas las ternas pitagóricas cuyas componentes están entre
 ----1 y n tiene un número impar de números pares. Por ejemplo,
 ----conjetura 10 == True
-----Solución:
-----conjetura :: Int -> Bool
-----conjetura n = and [odd (numeroDePares t) | t <- pitagoricas n]
-----Ejercicio 2.11.4. Demostrar la conjetura para todas las ternas pitagóricas.
-----Solución: Sea (x, y, z) una terna pitagórica. Entonces x2+y2 = z2. Pueden darse 4 casos:
-----Caso 1: x e y son pares. Entonces, x2, y2 y z2 también lo son. Luego el número de
-----componentes pares es 3 que es impar.
-----Caso 2: x es par e y es impar. Entonces, x2 es par, y2 es impar y z2 es impar. Luego el
-----número de componentes pares es 1 que es impar.
-----Caso 3: x es impar e y es par. Análogo al caso 2.
-----Caso 4: x e y son impares. Entonces, x2 e y2 también son impares y z2 es par. Luego
-----el número de componentes pares es 1 que es impar.
+
+conjetura :: Int -> Bool
+conjetura n = and [odd (numeroDePares t) | t <- pitagoricas n]
+
+
+
+
+
+
+
 ----2.12. Problema 9 del Proyecto Euler
 ----Ejercicio 2.12.1. Una terna pitagórica es una terna de números naturales (a, b, c) tal que a <
 ----b < c y a2 + b2 = c2. Por ejemplo (3, 4, 5) es una terna pitagórica. Definir la función
 ----ternasPitagoricas :: Integer -> [[Integer]]
 ----tal que (ternasPitagoricas x) es la lista de las ternas pitagóricas cuya suma es x. Por
-----ejemplo,
-----2.13. Producto escalar 49
 ----ternasPitagoricas 12 == [(3,4,5)]
 ----ternasPitagoricas 60 == [(10,24,26),(15,20,25)]
-----Solución:
-----ternasPitagoricas :: Integer -> [(Integer,Integer,Integer)]
-----ternasPitagoricas x = [(a,b,c) | a <- [1..x],
-----b <- [a+1..x],
-----c <- [x-a-b],
-----a^2 + b^2 == c^2]
+
+ternasPitagoricas :: Integer -> [(Integer,Integer,Integer)]
+ternasPitagoricas x = [(a,b,c) | a <- [1..x],
+								 b <- [a+1..x],
+								 c <- [x-a-b],
+								 a^2 + b^2 == c^2]
+
+
 ----Ejercicio 2.12.2. Definir la constante euler9 tal que euler9 es producto abc donde (a, b, c) es
 ----la única terna pitagórica tal que a + b + c = 1000. Calcular el valor de euler9.
 ----Solución:
 ----euler9 = a*b*c
 ----where (a,b,c) = head (ternasPitagoricas 1000)
 ----El cálculo del valor de euler9 es
-----ghci> euler9
-----31875000
+
+
 ----2.13. Producto escalar
 ----Ejercicio 2.13.1. El producto escalar de dos listas de enteros xs e ys de longitud n viene dado por
 ----la suma de los productos de los elementos correspondientes. Definir por comprensión la función
 ----productoEscalar :: [Int] -> [Int] -> Int
 ----tal que (productoEscalar xs ys) es el producto escalar de las listas xs e ys. Por ejemplo,
 ----productoEscalar [1,2,3] [4,5,6] == 32
-----Solución:
-----productoEscalar :: [Int] -> [Int] -> Int
-----productoEscalar xs ys = sum [x*y | (x,y) <- zip xs ys]
-----50 Capítulo 2. Definiciones por comprensión
+
+productoEscalar :: [Int] -> [Int] -> Int
+productoEscalar xs ys = sum [x*y | (x,y) <- zip xs ys]
+
+
+
 ----2.14. Suma de pares de elementos consecutivos
 ----Ejercicio 2.14.1. Definir, por comprensión, la función
 ----sumaConsecutivos :: [Int] -> [Int]
@@ -269,9 +254,14 @@ mayorRectangulo (x,y)(z,t)=(x,t)
 ----xs. Por ejemplo,
 ----sumaConsecutivos [3,1,5,2] == [4,6,7]
 ----sumaConsecutivos [3] == []
-----Solución:
-----sumaConsecutivos :: [Int] -> [Int]
-----sumaConsecutivos xs = [x+y | (x,y) <- zip xs (tail xs)]
+
+sumaConsecutivos::[Int]->[Int]
+sumaConsecutivos xs =[x+y|(x,y)<- zip xs(tail xs)]
+
+
+
+
+
 ----2.15. Posiciones de un elemento en una lista
 ----Ejercicio 2.15.1. En el tema se ha definido la función
 ----posiciones :: Eq a => a -> [a] -> [Int]
@@ -281,6 +271,24 @@ mayorRectangulo (x,y)(z,t)=(x,t)
 ----Definir, usando la función busca (definida en el tema 5), la función
 ----posiciones' :: Eq a => a -> [a] -> [Int]
 ----tal que posiciones' sea equivalente a posiciones.
+
+-- version1 recusrividad final
+
+
+-- ? Error raro hashkell
+--posiciones::Eq a =>a->[a]->[Int]
+--posiciones x xs= posicionesAux x xs [] 0
+
+--posicionesAux::Eq a =>a->[a]->[Int]->Int->[Int]
+--posicionesAux _ [] r _= r
+--posicionesAux x (y:ys) r c= if (x==y)then  posicionesAuxelse x ys (r++[c]) (c+1)   posicionesAux x ys r (c+1) 
+
+
+-- version2
+posiciones :: Eq a => a -> [a] -> [Int]
+posiciones x xs =[i | (x',i) <- zip xs [0..n], x == x']
+	where n = length xs - 1
+
 ----Solución: La definición de posiciones es
 ----posiciones :: Eq a => a -> [a] -> [Int]
 ----posiciones x xs =
@@ -289,9 +297,15 @@ mayorRectangulo (x,y)(z,t)=(x,t)
 ----La definición de busca es
 ----busca :: Eq a => a -> [(a, b)] -> [b]
 ----busca c t = [v | (c', v) <- t, c' == c]
+
+
 ----La redefinición de posiciones es
 ----posiciones' :: Eq a => a -> [a] -> [Int]
 ----posiciones' x xs = busca x (zip xs [0..])
+
+
+
+
 ----2.16. Representación densa de un polinomio representado dispersamente 51
 ----2.16. Representación densa de un polinomio representado
 ----dispersamente
@@ -303,10 +317,12 @@ mayorRectangulo (x,y)(z,t)=(x,t)
 ----Por ejemplo,
 ----densa [6,0,-5,4,-7] == [(4,6),(2,-5),(1,4),(0,-7)]
 ----densa [6,0,0,3,0,4] == [(5,6),(2,3),(0,4)]
-----Solución:
-----densa :: [Int] -> [(Int,Int)]
-----densa xs = [(x,y) | (x,y) <- zip [n-1,n-2..0] xs, y /= 0]
-----where n = length xs
+
+densa :: [Int] -> [(Int,Int)]
+densa xs = [(x,y) | (x,y) <- zip [n-1,n-2..0] xs, y /= 0]
+	where n = length xs
+
+
 ----2.17. Producto cartesiano
 ----Ejercicio 2.17.1. La función
 ----pares :: [a] -> [b] -> [(a,b)]
@@ -321,43 +337,48 @@ mayorRectangulo (x,y)(z,t)=(x,t)
 ----tal que pares' sea equivalente a pares.
 ----Indicación: Utilizar la función predefinida concat y encajar una lista por comprensión
 ----dentro de la otra.
-----Solución:
-----pares' :: [a] -> [b] -> [(a,b)]
-----pares' xs ys = concat [[(x,y) | y <- ys] | x <- xs]
-----52 Capítulo 2. Definiciones por comprensión
+
+pares' :: [a] -> [b] -> [(a,b)]
+pares' xs ys = concat [[(x,y) | y <- ys] | x <- xs]
+
+
+
 ----2.18. Consulta de bases de datos
 ----La bases de datos sobre actividades de personas pueden representarse mediante listas
 ----de elementos de la forma (a, b, c, d), donde a es el nombre de la persona, b su actividad,
 ----c su fecha de nacimiento y d la de su fallecimiento. Un ejemplo es la siguiente que
 ----usaremos a lo largo de los siguientes ejercicios
-----personas :: [(String,String,Int,Int)]
-----personas = [("Cervantes","Literatura",1547,1616),
-----("Velazquez","Pintura",1599,1660),
-----("Picasso","Pintura",1881,1973),
-----("Beethoven","Musica",1770,1823),
-----("Poincare","Ciencia",1854,1912),
-----("Quevedo","Literatura",1580,1654),
-----("Goya","Pintura",1746,1828),
-----("Einstein","Ciencia",1879,1955),
-----("Mozart","Musica",1756,1791),
-----("Botticelli","Pintura",1445,1510),
-----("Borromini","Arquitectura",1599,1667),
-----("Bach","Musica",1685,1750)]
+
+personas :: [(String,String,Int,Int)]
+personas = [("Cervantes","Literatura",1547,1616),
+	("Velazquez","Pintura",1599,1660),
+	("Picasso","Pintura",1881,1973),
+	("Beethoven","Musica",1770,1823),
+	("Poincare","Ciencia",1854,1912),
+	("Quevedo","Literatura",1580,1654),
+	("Goya","Pintura",1746,1828),
+	("Einstein","Ciencia",1879,1955),
+	("Mozart","Musica",1756,1791),
+	("Botticelli","Pintura",1445,1510),
+	("Borromini","Arquitectura",1599,1667),
+	("Bach","Musica",1685,1750)]
+
+
 ----Ejercicio 2.18.1. Definir la función nombres tal que (nombres bd) es la lista de los nombres
 ----de las personas de la base de datos bd. Por ejemplo,
-----ghci> nombres personas
-----["Cervantes","Velazquez","Picasso","Beethoven","Poincare",
-----"Quevedo","Goya","Einstein","Mozart","Botticelli","Borromini","Bach"]
-----Solución:
-----nombres :: [(String,String,Int,Int)] -> [String]
-----nombres bd = [x | (x,_,_,_) <- bd]
+----ghci> nombres personas["Cervantes","Velazquez","Picasso","Beethoven","Poincare","Quevedo","Goya","Einstein","Mozart","Botticelli","Borromini","Bach"]
+
+nombres :: [(String,String,Int,Int)] -> [String]
+nombres bd = [x | (x,_,_,_) <- bd]
+
+
 ----Ejercicio 2.18.2. Definir la función musicos tal que (musicos bd) es la lista de los nombres
 ----de los músicos de la base de datos bd. Por ejemplo,
 ----ghci> musicos personas
 ----["Beethoven","Mozart","Bach"]
-----Solución:
-----musicos :: [(String,String,Int,Int)] -> [String]
-----musicos bd = [x | (x,m,_,_) <- bd, m == "Musica"]
+
+musicos :: [(String,String,Int,Int)] -> [String]
+musicos bd = [x | (x,m,_,_) <- bd, m == "Musica"]
 ----
 ----2.18. Consulta de bases de datos 53
 ----Ejercicio 2.18.3. Definir la función seleccion tal que (seleccion bd m) es la lista de los
@@ -371,20 +392,22 @@ mayorRectangulo (x,y)(z,t)=(x,t)
 ----es la lista de los nombres de los músicos de la base de datos bd. Por ejemplo,
 ----ghci> musicos' personas
 ----["Beethoven","Mozart","Bach"]
-----Solución:
-----musicos' :: [(String,String,Int,Int)] -> [String]
-----musicos' bd = seleccion bd "Musica"
+
+--musicos' :: [(String,String,Int,Int)] -> [String]
+--musicos' bd = seleccion bd "Musica"
 ----Ejercicio 2.18.5. Definir la función vivas tal que (vivas bd a) es la lista de los nombres de
 ----las personas de la base de datos bd que estaban vivas en el año a. Por ejemplo,
 ----ghci> vivas personas 1600
 ----["Cervantes","Velazquez","Quevedo","Borromini"]
-----Solución:
-----vivas :: [(String,String,Int,Int)] -> Int -> [String]
-----vivas ps a = [x | (x,_,a1,a2) <- ps, a1 <= a, a <= a2]
+
+vivas :: [(String,String,Int,Int)] -> Int -> [String]
+vivas ps a = [x | (x,_,a1,a2) <- ps, a1 <= a, a <= a2]
 ----Nota. Un caso de estudio para las definiciones por comprensión es el capítulo 15 “El
-----cifrado César” (página 325).
-----
-----
+----cifrado César” (página 325)
+
+
+
+
 ----------- definidiones por comprension
 ----
 ----3.1. Potencia de exponente natural
@@ -392,19 +415,42 @@ mayorRectangulo (x,y)(z,t)=(x,t)
 ----potencia :: Integer -> Integer -> Integer
 ----tal que (potencia x n) es x elevado al número natural n. Por ejemplo,
 ----potencia 2 3 == 8
-----Solución:
-----potencia :: Integer -> Integer -> Integer
-----potencia m 0 = 1
-----potencia m n = m*(potencia m (n-1))
+
+potencia::Int->Int->Int
+potencia= potenciaAux 1
+
+potenciaAux::Int->Int->Int->Int
+potenciaAux r _ 0 =r 
+potenciaAux r c x= potenciaAux  (r*c) c (x-1)
+
+-------- version 2
+
+potencia :: Integer -> Integer -> Integer
+potencia m 0 = 1
+potencia m n = m*(potencia m (n-1))
+
+
+
 ----3.2. Replicación de un elemento
 ----Ejercicio 3.2.1. Definir por recursión la función
 ----replicate' :: Int -> a -> [a]
 ----tal que (replicate' n x) es la lista formado por n copias del elemento x. Por ejemplo,
 ----replicate' 3 2 == [2,2,2]
-----Solución:
-----replicate' :: Int -> a -> [a]
-----replicate' 0 _ = []
-----replicate' (n+1) x = x : replicate' n x
+
+
+replicate' :: Int -> a -> [a]
+replicate' =  replicateAux []
+
+replicateAux::[a]->Int -> a -> [a]
+replicateAux r 0 _= r
+replicateAux r n x = replicateAux (x:r) (n-1) x
+
+------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
+
+-- MARTES MAÑANA
+
 ----3.3. Doble factorial 57
 ----3.3. Doble factorial
 ----Ejercicio 3.3.1. El doble factorial de un número n se define por
@@ -420,28 +466,9 @@ mayorRectangulo (x,y)(z,t)=(x,t)
 ----tal que (dobleFactorial n) es el doble factorial de n. Por ejemplo,
 ----dobleFactorial 8 == 384
 ----dobleFactorial 9 == 945
-----Solución:
-----dobleFactorial :: Integer -> Integer
-----dobleFactorial 0 = 1
-----dobleFactorial 1 = 1
-----dobleFactorial n = n * dobleFactorial (n-2)
-----3.4. Algoritmo de Euclides del máximo común divisor
-----Ejercicio 3.4.1. Dados dos números naturales, a y b, es posible calcular su máximo común divisor
-----mediante el Algoritmo de Euclides. Este algoritmo se puede resumir en la siguiente fórmula:
-----mcd(a, b) =
-----(
-----a, si b = 0
-----mcd(b, a módulo b), si b > 0
-----Definir la función
-----mcd :: Integer -> Integer -> Integer
-----tal que (mcd a b) es el máximo común divisor de a y b calculado mediante el algoritmo de
-----Euclides. Por ejemplo,
-----58 Capítulo 3. Definiciones por recursión
-----mcd 30 45 == 15
-----Solución:
-----mcd :: Integer -> Integer -> Integer
-----mcd a 0 = a
-----mcd a b = mcd b (a 'mod' b)
+
+
+
 ----3.5. Menor número divisible por una sucesión de números
 ----Los siguientes ejercicios tienen como objetivo resolver el problema 5 del proyecto
 ----Euler que consiste en calcular el menor número divisible por los números del 1 al 20.
@@ -465,53 +492,10 @@ mayorRectangulo (x,y)(z,t)=(x,t)
 ----El cálculo es
 ----ghci> euler5
 ----232792560
-----3.6. Número de pasos para resolver el problema de las torres de Hanoi 59
-----3.6. Número de pasos para resolver el problema de las torres
-----de Hanoi
-----Ejercicio 3.6.1. En un templo hindú se encuentran tres varillas de platino. En una de ellas, hay
-----64 anillos de oro de distintos radios, colocados de mayor a menor.
-----El trabajo de los monjes de ese templo consiste en pasarlos todos a la tercera varilla, usando
-----la segunda como varilla auxiliar, con las siguientes condiciones:
-----En cada paso sólo se puede mover un anillo.
-----Nunca puede haber un anillo de mayor diámetro encima de uno de menor diámetro.
-----La leyenda dice que cuando todos los anillos se encuentren en la tercera varilla, será el fin del
-----mundo.
-----Definir la función
-----numPasosHanoi :: Integer -> Integer
-----tal que (numPasosHanoi n) es el número de pasos necesarios para trasladar n anillos. Por ejemplo,
-----numPasosHanoi 2 == 3
-----numPasosHanoi 7 == 127
-----numPasosHanoi 64 == 18446744073709551615
-----Solución: Sean A, B y C las tres varillas. La estrategia recursiva es la siguiente:
-----Caso base (n = 1): Se mueve el disco de A a C.
-----Caso inductivo (n = m + 1): Se mueven m discos de A a C. Se mueve el disco de
-----A a B. Se mueven m discos de C a B.
-----Por tanto,
-----numPasosHanoi :: Integer -> Integer
-----numPasosHanoi 1 = 1
-----numPasosHanoi (n+1) = 1 + 2 * numPasosHanoi n
-----3.7. Conjunción de una lista
-----Ejercicio 3.7.1. Definir por recursión la función
-----and' :: [Bool] -> Bool
-----60 Capítulo 3. Definiciones por recursión
-----tal que (and' xs) se verifica si todos los elementos de xs son verdadero. Por ejemplo,
-----and' [1+2 < 4, 2:[3] == [2,3]] == True
-----and' [1+2 < 3, 2:[3] == [2,3]] == False
-----Solución:
-----and' :: [Bool] -> Bool
-----and' [] = True
-----and' (b:bs) = b && and' bs
-----3.8. Pertenencia a una lista
-----Ejercicio 3.8.1. Definir por recursión la función
-----elem' :: Eq a => a -> [a] -> Bool
-----tal que (elem' x xs) se verifica si x pertenece a la lista xs. Por ejemplo,
-----elem' 3 [2,3,5] == True
-----elem' 4 [2,3,5] == False
-----Solución:
-----elem' :: Eq a => a -> [a] -> Bool
-----elem' x [] = False
-----elem' x (y:ys) | x == y = True
---- |otherwise = elem' x ys
+
+
+
+
 ----3.9. Último elemento de una lista
 ----Ejercicio 3.9.1. Definir por recursión la función
 ----last' :: [a] -> a
@@ -527,21 +511,19 @@ mayorRectangulo (x,y)(z,t)=(x,t)
 ----concat' :: [[a]] -> [a]
 ----tal que (concat' xss) es la lista obtenida concatenando las listas de xss. Por ejemplo,
 ----concat' [[1..3],[5..7],[8..10]] == [1,2,3,5,6,7,8,9,10]
-----Solución:
-----concat' :: [[a]] -> [a]
-----concat' [] = []
-----concat' (xs:xss) = xs ++ concat' xss
+
 ----3.11. Selección de un elemento
 ----Ejercicio 3.11.1. Definir por recursión la función
 ----selecciona :: [a] -> Int -> a
 ----tal que (selecciona xs n) es el n–ésimo elemento de xs. Por ejemplo,
 ----selecciona [2,3,5,7] 2 == 5
-----Solución:
-----selecciona :: [a] -> Int -> a
-----selecciona (x:_) 0 = x
-----selecciona (_:xs) n = selecciona xs (n-1)
+
+
 ----3.12. Selección de los primeros elementos
 ----Ejercicio 3.12.1. Definir por recursión la función
+
+
+
 ----take' :: Int -> [a] -> [a]
 ----tal que (take' n xs) es la lista de los n primeros elementos de xs. Por ejemplo,
 ----take' 3 [4..12] == [4,5,6]
@@ -559,65 +541,7 @@ mayorRectangulo (x,y)(z,t)=(x,t)
 ----refinada [2,7,1,8] == [2.0,4.5,7.0,4.0,1.0,4.5,8.0]
 ----refinada [2] == [2.0]
 ----refinada [] == []
-----Solución:
-----refinada :: [Float] -> [Float]
-----refinada (x:y:zs) = x : (x+y)/2 : refinada (y:zs)
-----refinada xs = xs
-----3.14. Ordenación por mezcla
-----3.14.1. Mezcla de listas ordenadas
-----Ejercicio 3.14.1. Definir por recursión la función
-----mezcla :: Ord a => [a] -> [a] -> [a]
-----tal que (mezcla xs ys) es la lista obtenida mezclando las listas ordenadas xs e ys. Por ejemplo,
-----mezcla [2,5,6] [1,3,4] == [1,2,3,4,5,6]
-----Solución:
-----mezcla :: Ord a => [a] -> [a] -> [a]
-----mezcla [] ys = ys
-----mezcla xs [] = xs
-----mezcla (x:xs) (y:ys) | x <= y = x : mezcla xs (y:ys)
---- |otherwise = y : mezcla (x:xs) ys
-----3.14. Ordenación por mezcla 63
-----3.14.2. Mitades de una lista
-----Ejercicio 3.14.2. Definir la función
-----mitades :: [a] -> ([a],[a])
-----tal que (mitades xs) es el par formado por las dos mitades en que se divide xs tales que sus
-----longitudes difieren como máximo en uno. Por ejemplo,
-----mitades [2,3,5,7,9] == ([2,3],[5,7,9])
-----Solución:
-----mitades :: [a] -> ([a],[a])
-----mitades xs = splitAt (length xs 'div' 2) xs
-----3.14.3. Ordenación por mezcla
-----Ejercicio 3.14.3. Definir por recursión la función
-----ordMezcla :: Ord a => [a] -> [a]
-----tal que (ordMezcla xs) es la lista obtenida ordenando xs por mezcla (es decir, considerando
-----que la lista vacía y las listas unitarias están ordenadas y cualquier otra lista se ordena mezclando
-----las dos listas que resultan de ordenar sus dos mitades por separado). Por ejemplo,
-----ordMezcla [5,2,3,1,7,2,5] => [1,2,2,3,5,5,7]
-----Solución:
-----ordMezcla :: Ord a => [a] -> [a]
-----ordMezcla [] = []
-----ordMezcla [x] = [x]
-----ordMezcla xs = mezcla (ordMezcla ys) (ordMezcla zs)
-----where (ys,zs) = mitades xs
-----3.14.4. La ordenación por mezcla da listas ordenadas
-----Ejercicio 3.14.4. Definir por recursión la función
-----ordenada :: Ord a => [a] -> Bool
-----tal que (ordenada xs) se verifica si xs es una lista ordenada. Por ejemplo,
-----ordenada [2,3,5] == True
-----ordenada [2,5,3] == False
-----64 Capítulo 3. Definiciones por recursión
-----Solución:
-----ordenada :: Ord a => [a] -> Bool
-----ordenada [] = True
-----ordenada [_] = True
-----ordenada (x:y:xs) = x <= y && ordenada (y:xs)
-----Ejercicio 3.14.5. Comprobar con QuickCheck que la ordenación por mezcla de una lista es una
-----lista ordenada.
-----Solución: La propiedad es
-----prop_ordMezcla_ordenada :: Ord a => [a] -> Bool
-----prop_ordMezcla_ordenada xs = ordenada (ordMezcla xs)
-----La comprobación es
-----ghci> quickCheck prop_ordMezcla_ordenada
----- +++ OK, passed 100 tests.
+
 ----3.14.5. La ordenación por mezcla da una permutación
 ----Ejercicio 3.14.6. Definir por recursión la función
 ----borra :: Eq a => a -> [a] -> [a]
@@ -651,6 +575,8 @@ mayorRectangulo (x,y)(z,t)=(x,t)
 ----ghci> quickCheck prop_ordMezcla_permutacion
 ---- +++ OK, passed 100 tests.
 ----
+
+
 ----------- comprension y recursion
 ----
 ----4.1. Suma de los cuadrados de los primeros números
@@ -1852,6 +1778,8 @@ mayorRectangulo (x,y)(z,t)=(x,t)
 --mapR f (x:xs) = f x : mapR f xs
 --Ejercicio 6.15.2. Redefinir, usando foldr, la función map. Por ejemplo,
 --mapP (+2) [1,7,3] == [3,9,5]
+-
+
 --Solución:
 --mapP :: (a -> b) -> [a] -> [b]
 --mapP f = foldr g []
