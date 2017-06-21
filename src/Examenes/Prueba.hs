@@ -73,3 +73,21 @@ instance Show Dat where
 ver::Dat->Dat->Dat
 ver (D n1 n2)(D n3 n4) = if ((D n1 n2)<=(D n3 n4))then (D n1 n2) else(D n3 n4)
 
+data Colection a = C[a] 
+
+class Tab a where{
+	tabular::[a]->[a]
+}
+
+--instance Tab Colection where{
+--	tabular c=(C a)++"c"
+--}
+
+
+
+
+
+
+
+
+
