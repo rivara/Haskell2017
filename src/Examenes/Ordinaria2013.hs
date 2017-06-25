@@ -28,4 +28,7 @@ hermanos AVacio _ _ = False
 hermanos (Rama AVacio r AVacio) h1 h2 = False
 hermanos (Rama AVacio r hder) h1 h2 = hermanos hder h1 h2
 hermanos (Rama hizq r AVacio) h1 h2 = hermanos hizq h1 h2
-hermanos (Rama (Rama hizq1 r1 hder1) r (Rama hizq2 r2 hder2)) h1 h2 = (r1 == h1 && r2 == h2 || r1 == h2 && r2 == h1) || hermanos (Rama hizq1 r1 hder1) h1 h2 || hermanos (Rama hizq2 r2 hder2) h1 h2 
+hermanos (Rama (Rama hizq1 r1 hder1) r (Rama hizq2 r2 hder2)) h1 h2 = (r1 == h1 && r2 == h2 || r1 == h2 && r2 == h1) || hermanos (Rama hizq1 r1 hder1) h1 h2 || hermanos (Rama hizq2 r2 hder2) h1 h2
+
+
+-- tenis 
