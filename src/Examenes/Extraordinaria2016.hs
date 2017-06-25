@@ -3,8 +3,8 @@ module Examenes.Extraordinaria2016 where
 -- E2
 
 eje2::String->(String,String)
-eje2 xs= foldr(\a b ->(([a]++b),([a]++b)))( , )xs
---eje2 xs= foldr(\a b -> if(esConsonante a)then (b,b++[a]) else (b++[a],b)) (,) xs
+--eje2 xs= foldr(\a b ->([a],[a])) ([],[]) xs
+eje2 xs= foldr(\a b -> if(esConsonante a)then (a++b,[a]) else ([a],[]))([],[]) xs
 
 esConsonante :: Char->Bool
 esConsonante x= case x of

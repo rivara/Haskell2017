@@ -45,3 +45,10 @@ instance Compatible Library where
 
 compatibleLibraries :: [Library] -> Library -> [Library]
 compatibleLibraries ls lin = foldl (\lr l -> if areCompatibles lin l then lr ++ [l] else lr) [] ls
+
+
+
+map'  :: (a->b) -> [a] -> [b]
+map' f  [] =  []
+map' f (x:xs) =  f x : map' f xs
+-- map' (*2) [1,2,3]

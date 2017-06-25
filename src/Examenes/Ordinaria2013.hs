@@ -32,3 +32,4 @@ hermanos (Rama (Rama hizq1 r1 hder1) r (Rama hizq2 r2 hder2)) h1 h2 = (r1 == h1 
 
 
 -- tenis 
+type Nombre=String
