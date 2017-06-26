@@ -2,9 +2,10 @@
 module Examenes.Extraordinaria2016 where
 -- E2
 
-eje2::String->(String,String)
---eje2 xs= foldr(\a b ->([a],[a])) ([],[]) xs
-eje2 xs= foldr(\a b -> if(esConsonante a)then (a++b,[a]) else ([a],[]))([],[]) xs
+-- ej "holaAmigo" --> ("oaAio","hlmg")
+
+ej :: String -> (String, String)
+ej = foldl (\ (vs, cs) c -> if (esConsonante (c)) then (vs ++ [c], cs) else (vs, cs ++ [c])) ([], [])
 
 esConsonante :: Char->Bool
 esConsonante x= case x of
@@ -17,19 +18,30 @@ esConsonante x= case x of
 				'E'-> True
 				'I'-> True
 				'O'-> True
-				'U'-> True
+				'U'-> True	
 				otherwise ->False
 
 -- E3
--- class Joinable a where{
--- 	union:: a->a->[a]
--- } 
+--class Joinable v where{
+-- 	union::v a->v a->v a
+--} 
 
--- class Joinable ([]) where{
--- 	union:: [a]->[a]->[a]
--- } 
+-- ?????????
+
+--class Joinable2 ([]) where{
+-- 	union:: l1 l2= l1++l2
+--	} 
 
 
+data Arbol a = Vacio | Rama (Arbol a) a (Arbol a) deriving Show 
+-- ?????????
+
+--instance Joinable Arbol where{
+-- 	 union Vacio Vacio = Vacio
+--	 union Vacio ar = ar
+ -- 	 union ar Vacio = ar
+--  	 union (Rama hizq1 r1 hder1) ar2 = (Rama (union hizq1 ar2) r1 hder1)
+--	}
 --E4
 foldl'::[Int]->[[Int]]
 foldl'= foldAux[]

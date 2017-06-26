@@ -1,4 +1,4 @@
-
+  
 module Examenes.Ordinaria2015 where
 -- E2 a
 --  filter' odd [1,2,3,4] ->[1,3] 
@@ -24,7 +24,13 @@ iguales=igualesAux[[]]
 
 igualesAux::(Eq a)=>[[a]]->[a]->[[a]]
 igualesAux r []=r
-igualesAux r (x:xs)= igualesAux r++[n|n<- xs ,x==n] xs
+igualesAux r (x:xs)= igualesAux (r++[buscar x xs])(elimina x xs) 
+
+buscar::(Eq a)=>a->[a]->[a]
+buscar x ys =foldr(\a b->if(a==x)then a:b else b)[x] ys
+
+elimina::(Eq a)=>a->[a]->[a]
+elimina x ys =foldr(\a b->if(a==x)then b else a:b)[] ys
 
 
 -- Iva

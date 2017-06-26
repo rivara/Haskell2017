@@ -1,4 +1,4 @@
-
+--tarde
 module Examenes.Extraordinaria2013 where
 --2) Se pide implementar un programa en Haskell que sea capaz de obtener el número de errores de una tabla de multiplicar, junto con los elementos de la tabla con los errores. Por ejemplo, si recibe la siguiente tabla del 1 el resultado debería de ser algo como:
 --  "Hay 0 errores, que son: ".
