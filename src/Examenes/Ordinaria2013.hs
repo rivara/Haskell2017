@@ -30,8 +30,53 @@ hermanos (Rama (Rama hizq1 r1 hder1) r (Rama hizq2 r2 hder2)) h1 h2 = (r1 == h1 
 
 -- hermanos (Rama (Rama AVacio 1 AVacio) 3 (Rama AVacio 2 AVacio)) 1 2
 
--- tenis Solucion Patxi con errores
---type Nombre = String
+
+
+
+--  VERSION 1
+--type Jugador = String
+--data Set = S (Int, Int) -- type Set = (Int, Int)
+--data Partido = P [Set] -- type Partido = [Set]
+--data Torneo = TO {nombre :: String, finalista1 :: Jugador, finalista2 :: Jugador, partido :: Partido}
+--
+--
+--instance Eq Torneo where
+--  (==) t1 t2 = (nombre t1) == (nombre t2)
+--
+--instance Ord Torneo where
+--  (<) t1 t2 = (nombre t1) < (nombre t2)
+--  (<=) t1 t2 = t1 < t2 || (nombre t1) == (nombre t2)
+--
+--instance Show Torneo where
+--  show t = (nombre t) ++ ", Ganador: " ++ g ++ ", en " ++ show (sets t) ++ " sets."
+--    where
+--      g = ganador t
+--
+--sets :: Torneo -> Int
+--sets (TO _ _ _ (P ss)) = length ss
+--
+--ganador :: Torneo -> Jugador
+--ganador = ganadorAux (0, 0)
+--
+--ganadorAux :: (Int, Int) -> Torneo -> Jugador
+--ganadorAux (s1, s2) (TO _ f1 f2 (P [])) = if s1 > s2 then f1 else f2
+--ganadorAux (s1, s2) (TO n f1 f2 (P ((S (j1, j2)):ss))) = ganadorAux (if j1 > j2 then (s1 + 1, s2) else (s1, s2 + 1)) (TO n f1 f2 (P ss))
+--
+--instance Show Temporada' where
+--  show (TE []) = ""
+--  show (TE (t:ts)) = show t ++ "\n" ++ show (TE ts)
+--
+--temporada2013 :: Temporada'
+-- temporada2013 = TE [TO "Open de Australia" "Novak Djokovic" "Andy Murray" (P [S (6, 7), S (7, 6), S (6, 3), S (6, 2)]), TO "Indian Wells" "Juan Martín del Potro" "Rafael Nadal" (P [S (6, 4), S (3, 6), S (4, 6)]), TO "Mutua Madrid Open" "Rafel Nadal" "Stanislas Wawrinka" (P [S (6, 2), S (6, 4)]), TO "Wimbledon" "Novak Djokovic" "Andy Murray" (P [S (6, 4), S (7, 5), S (6, 4)])]
+--
+--qs :: Ord a => [a] -> [a]
+--qs [] = []
+--qs (p:xs) = qs [x | x <- xs, x < p] ++ [p] ++ qs [x | x <- xs, x >= p]
+--
+--mostrarListadoOrdenadoTorneos :: Temporada' -> String
+--mostrarListadoOrdenadoTorneos (TE ts) = show (TE (qs ts))
+
+
 --
 ---- Representa los datos de uno de los finalistas, con su lista de puntos para cada set
 ---- cuando más longitud tenga la lista, más puntos han jugado
@@ -40,6 +85,7 @@ hermanos (Rama (Rama hizq1 r1 hder1) r (Rama hizq2 r2 hder2)) h1 h2 = (r1 == h1 
 --data Torneo = Tor Nombre Finalistas
 --data Temporada = Temp [Torneo] deriving Show
 --
+-- --  VERSION 2
 --instance Show Torneo where
 --show torneo = getNombre (torneo) ++ ", Ganador: "++ getNombreFinalista (ganador torneo) ++ ", en " ++ show (numeroSets (torneo)) ++ " sets." ++ "\n"
 --

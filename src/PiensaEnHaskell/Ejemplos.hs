@@ -8,48 +8,83 @@ replicateAux::[a]->Int -> a -> [a]
 replicateAux r 0 _= r
 replicateAux r n x = replicateAux (x:r) (n-1) x
 
-data Version = V {major :: Int, minor :: Int}
-data Library = L {name :: String, version :: Version}
-
-instance Show Version where
-	show (V ma mi) = show ma ++ "." ++ show mi
-
-instance Eq Version where
-	(==) (V ma1 mi1) (V ma2 mi2) = ma1 == ma2 && mi1 == mi2
-	(/=) v1 v2 = not (v1 == v2)
-	
-instance Ord Version where
-	(<) (V ma1 mi1) (V ma2 mi2) = (ma1 < ma2) || ((ma1 == ma2) && (mi1 < mi2))
-	(<=) v1 v2 = (v1 < v2) || (v1 == v2)
-	(>) (V ma1 mi1) (V ma2 mi2) = (ma1 > ma2) || ((ma1 == ma2) && (mi1 > mi2))
-	(>=) v1 v2 = (v1 > v2) || (v1 == v2) 
-
-instance Show Library where
-	show (L n v) = n ++ ": " ++ show v
-
-instance Eq Library where
-	(==) (L n1 v1) (L n2 v2) = n1 == n2 && v1 == v2
-	(/=) l1 l2 = not (l1 == l2)
-	
-instance Ord Library where
-	(<) (L n1 v1) (L n2 v2) = (n1 < n2) || ((n1 == n2) && (v1 < v2))
-	(<=) l1 l2 = (l1 < l2) || (l1 == l2)
-	(>) (L n1 v1) (L n2 v2) = (n1 > n2) || ((n1 == n2) && (v1 > v2))
-	(>=) l1 l2 = (l1 > l2) || (l1 == l2)
-
-class Compatible a where
-	areCompatibles :: a -> a -> Bool
-
-instance Compatible Library where
-	areCompatibles (L n1 v1) (L n2 v2) = (n1 == n2) && ((major v1) == (major v2))
-
-compatibleLibraries :: [Library] -> Library -> [Library]
-compatibleLibraries ls lin = foldl (\lr l -> if areCompatibles lin l then lr ++ [l] else lr) [] ls
 
 -- map' con foldl
 map'::[a]->(a->a)->[a]
 map' xs f= foldl(\a b -> (f b):a)[] xs
  
  
--- filer' con foldr
+-- filter' con foldr
+
+--filter'::[a]->(f->Bool)->[a]
+--filter' xs f= foldr(\a b -> if(f a)then b else b)[] xs
+
+
+-- Ejercicio Inventado
+--Se quiere informatizar una biblioteca  usando para ello haskell
+--la biblioteca  , tendra un tipo que sera Libros y cada libro se compondrá de una signatura un titulo y un autor.
+--A continuación existirá otro tipo Catalago que contendra los libros y el genero de estos
+--
+--ejemplo:
+-- libro (“1”,”Dracula,”Bram Stoker”)
+-- libro (“2”,”It,”Stephen king”)
+-- genero ([“1”,”Dracula,”Bram Stoker”,“2”,”It,”Stephen king”],terror)
+--
+--se pide crear  ordenar libros y una clase Catalogos la cual contara cuantos géneros hay en la biblioteca , 
+--se llamara a esta clase por medio de la función	 totalGeneros
+
+data Libro= L{signatura::String,titulo::String,autor::String}
+data Catalogo= C{libros::[Libro],genero::String}
+
+-- INSTANCIAS SHOW EQ ORD de LIBRO
+
+instance Eq Libro where
+	(==)(L s1 t1 a1)(L s2 t2 a2)= s1==s2 && t1==t2 && a1==a2
+
+instance Show Libro where
+	show(L s t a)= "Libro"++show t ++"signatura"++ show s ++"Autor"++show a
+instance Ord Libro where
+	(<)(L s1 t1 a1)(L s2 t2 a2)= s1<s2
+	(>)(L s1 t1 a1)(L s2 t2 a2)= s1>s2
+	(<=)(L s1 t1 a1)(L s2 t2 a2)=s1<=s2
+	(>=)(L s1 t1 a1)(L s2 t2 a2)=s1>=s2
+	
+
+
+-- INSTANCIAS SHOW EQ ORD DE CATALOGO
+
+instance Eq Catalogo where
+	(==)(C l1 g1)(C l2 g2)= l1==l2 && g1==g2 
+
+instance Show Catalogo where
+	show(C l g)= "Libroa"++show l ++"genero"++ show g 
+	
+	
+class Generos g where
+	cuenta::g->Int
+
+instance Generos Catalogo where
+	cuenta(C l g)= length l	
+
+
+cuentaGeneros::Catalogo->Int
+cuentaGeneros c = cuenta c
+
+--cuentaGeneros (C [L "1" "Dracula" "Bram Stoker",L "2" "It" "Stephen king"] "terror")
+
+
+-- PRUEBAS
+llenaLibro::(String,String,String)->Libro
+llenaLibro(s,t,a) = L s t a
+--libr("2","It","Stephen king")
+ 
+llenaLibro'::Libro->Libro
+llenaLibro'(L s t a) = L s t a
+
+--libr'(L "2" "It" "Stephen king")
+llenaCatalogo::[Libro]->String->Catalogo
+llenaCatalogo l genero=(C l genero)
+
+--llenaCatalogo [L "1" "Dracula" "Bram Stoker",L "2" "It" "Stephen king"] "terror" 
+--llenaCatalogo [L "1" "Dracula" "Bram Stoker",L "2" "It" "Stephen king"] "terror" 
 

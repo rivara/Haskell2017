@@ -34,4 +34,30 @@ elimina x ys =foldr(\a b->if(a==x)then b else a:b)[] ys
 
 
 -- Iva
+type Precio = Float
 
+data Musica = Musica Precio
+instance Show Musica where
+  show (Musica p) = "Musica (" ++ show p ++ " Euros)"
+
+data Libro = Libro Precio
+instance Show Libro where
+  show (Libro p) = "Libro (" ++ show p ++ " Euros)"
+
+class Producto p where
+  precioBase :: p -> Float
+  ivaImponible :: p -> Float
+  tasaAplicable :: p -> Float
+
+instance Producto Musica where
+  precioBase (Musica p) = p
+  ivaImponible _ = 21
+  tasaAplicable (Musica p) = p + (p * ((ivaImponible (Musica p)) / 100))
+
+instance Producto Libro where
+  precioBase (Libro p) = p
+  ivaImponible _ = 15
+  tasaAplicable (Libro p) = p + (p * ((ivaImponible (Libro p)) / 100))
+
+pvp :: Producto p => p -> Float
+pvp = tasaAplicable 
