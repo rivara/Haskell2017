@@ -45,7 +45,7 @@ cambioAux' elemento = foldl (\cadenaSol c -> if isUpper c then cadenaSol++[toLow
 
 
 
-
+-- VERSION1
 
 data Version = V {major :: Int, minor :: Int}
 data Library = L {name :: String, version :: Version}
@@ -84,3 +84,37 @@ instance Compatible Library where
 
 compatibleLibraries :: [Library] -> Library -> [Library]
 compatibleLibraries ls lin = foldl (\lr l -> if areCompatibles lin l then lr ++ [l] else lr) [] ls
+
+--VERSION2
+
+type Name= String
+data Version'  =Ve{major'::Int,minor'::Int} deriving Show
+data Library' =Li{name'::String,version'::Version',dependencies::[Library]} deriving Show
+
+class Compatible' a where
+	compatible'::a->a->Bool
+
+instance Eq Version' where
+	v1==v2 = major' v1 == major' v1 && minor' v1== minor' v2
+
+instance Ord Version' where
+    v1 < v2 = major' v1 < major' v2 || major' v1 == major' v2 && minor' v1 < minor' v2
+    v1 <= v2 = major' v1 < major' v2 || major' v1 == major' v2 && minor' v1 <= minor' v2
+    v1 > v2 = major' v1 > major' v2 || major' v1 == major' v2 && minor' v1 > minor' v2
+    v1 >= v2 = major' v1 > major' v2 || major' v1 == major' v2 && minor' v1 >= minor' v2
+
+instance Eq Library' where
+    l1 == l2 = name' l1 == name' l2 && version' l1 == version' l2
+
+instance Ord Library' where
+    l1 > l2 = name' l1 == name' l2 && version' l1 > version' l2
+    l1 < l2 = name' l1 == name' l2 && version' l1 < version' l2
+    l1 <= l2 = name' l1 == name' l2 && version' l1 <= version' l2
+    l1 >= l2 = name' l1 == name' l2 && version' l1 >= version' l2
+
+instance Compatible' Library' where
+   compatible' l1 l2 = name' l1 /= name' l2 || major' (version' l1) == major' (version' l2)
+
+checkCompatibility :: Library' -> [Library'] -> [Library']
+checkCompatibility l ls = [x | x <- ls, compatible' x l]
+
