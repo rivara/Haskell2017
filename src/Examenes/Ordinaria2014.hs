@@ -35,16 +35,21 @@ instance Show Ocupacion where
  show(O l o)= "libres "++ show l ++" Ocupado "++ show o 
 
 
-insertarMesaLibre::Ocupacion->Mesa->Ocupacion
-insertarMesaLibre r(O [] mo)m=O(r++[m]) mo
-insertarMesaLibreAux r (O (ml:mls) mo) m = if (capacidad m) <= (capacidad ml) then 
-							O (r ++ (m:ml:mls)) mo else 
-							insertarMesaLibreAux (r ++ [ml]) (O mls mo) m
 
-							
-							
+addMesaLibre :: Ocupacion -> Mesa -> Ocupacion
+addMesaLibre (O mesas ocupadas) mesa = O (addMesaOrdenada mesas mesa) ocupadas
+addMesaOrdenada :: [Mesa] -> Mesa -> [Mesa]
+addMesaOrdenada [] m = [m]
+addMesaOrdenada (m1:mesas) m2
+	| m1 >= m2 = m2:m1:mesas
+	| otherwise = m1:addMesaOrdenada mesas m2
+					
+--version2
+-- insertarMesaLibreAux :: Mesas -> Ocupacion -> Mesa -> Ocupacion
+-- insertarMesaLibreAux r (Ocupacion [] mo) m = Ocupacion (r ++ [m]) mo
+-- insertarMesaLibreAux r (Ocupacion (ml:mls) mo) m = if (capacidad m) <= (capacidad ml) then Ocupacion (r ++ (m:ml:mls)) mo else insertarMesaLibreAux (r ++ [ml]) (Ocupacion mls mo) m
 
-
+--
 ocuparMesa :: Ocupacion -> Int -> Ocupacion
 ocuparMesa = ocuparMesaAux []
 
